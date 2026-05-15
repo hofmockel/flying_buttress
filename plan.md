@@ -4,6 +4,8 @@
 
 This document maps every part of the **flying_buttress** factory onto Claude Code's native features. Where `buttress.md` is the manifesto — opinionated on roles, agnostic on tools — this is the green-field operating manual that assumes Claude Code is the substrate and asks: *what does each part of the factory look like in Claude Code terms?*
 
+For the review process specifically — review kinds, mechanisms, GitHub Actions, lifecycle alignment — see `review_plan.md`.
+
 ---
 
 ## 1. What this document is
@@ -293,6 +295,8 @@ This is a guardrail as much as a workflow choice. The main context is the limite
 - **Layer 3 (agent outputs)** — skills encode validation steps that check agent outputs against contracts before they reach users or other agents.
 
 Three layers, three enforcement mechanisms, three boundaries.
+
+The review process — the multi-perspective lattice that orchestrates these guardrails against actual changes — is detailed in `review_plan.md`.
 
 ---
 
@@ -587,6 +591,8 @@ A possibility survey — not a commitment plan. Each entry is something that *co
 
 - **Load-bearing first wave** — `claude-in-chrome`, `claude-preview`, `ccd_directory`, `scheduled-tasks`, `ccd_session_mgmt`, `mcp-registry`
 - **Speculative additions** — custom MCP servers wrapping project-specific systems (deferred)
+
+Review-specific skills, hooks, subagents, and GitHub Actions are enumerated separately in `review_plan.md` §9.
 
 ---
 
