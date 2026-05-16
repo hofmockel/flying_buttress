@@ -4,7 +4,7 @@
 
 **Repo:** `flying_buttress` — a software factory for AI-native development  
 **Branch:** `main` (clean, pushed, up to date)  
-**Last commit:** pending — ADR-007 accepted this session
+**Last commit:** pending — v1 complete
 
 ---
 
@@ -12,13 +12,15 @@
 
 1. **Committed hooks and tooling** — `.claude/hooks/`, `tools/`, updated `settings.json` and `.gitignore` were untracked; committed them. `.venv/` and `schema/` added to `.gitignore`.
 
-2. **Accepted ADR-006** (settings governance) — MANUAL.md §7 expanded with the "what requires a settings PR" trigger list and the senior review checklist. ADR-006 marked Accepted; G6 closed.
+2. **Accepted ADR-006** (settings governance) — MANUAL.md §7 expanded with trigger list and review checklist. ADR-006 marked Accepted; G6 closed.
 
-3. **Accepted ADR-007** (doc cleanup) — Three targeted `plan.md` edits: C1 convention note in §8.4, C2 §11 collapsed to one paragraph, C3 quarterly review cadence in §4.4. ADR-007 marked Accepted; C1/C2/C3 closed.
+3. **Accepted ADR-007** (doc cleanup) — Three targeted `plan.md` edits: C1 convention note in §8.4, C2 §11 collapsed, C3 quarterly review cadence in §4.4. ADR-007 marked Accepted; C1/C2/C3 closed.
+
+4. **C4 deny list added** — deny rules added to `.claude/settings.json` and `templates/.claude/settings.json.tmpl`. All eight v1 deliverables verified present. **v1 declared complete.**
 
 ---
 
-## ADR status going into next session
+## ADR status
 
 | ADR | Gap | Status |
 |---|---|---|
@@ -30,17 +32,20 @@
 | ADR-006 | G6 — Settings governance | **Accepted** |
 | ADR-007 | C1/C2/C3 — Doc cleanup | **Accepted** |
 
-**All seven ADRs accepted. The backlog is clear.**
+**All seven ADRs accepted. Backlog clear. v1 complete.**
 
 ---
 
-## Next step: C4 (deny list) or v1 done condition
+## Next step: Tier 2 integration milestone (ADR-004)
 
-All critical gaps and smaller concerns are closed. One open item remains in backlog.md:
+v1 is done. The next gate before v2 work starts is the **Tier 2 integration milestone** from ADR-004:
 
-**C4 — `settings.json` deny list deferred** — The deny list was intentionally omitted from v1. Candidate rules are documented in `backlog.md`. The recommendation was to add them once the allow list has stabilized and the team has a session's worth of data. Review C4 and decide: add the deny list now, or call v1 complete and move to the integration milestone (ADR-004 Tier 2).
+1. Run `make scaffold TARGET=../fb_test_alpha` to stamp out a sibling test project.
+2. Run `/spec` inside `fb_test_alpha` on a real problem — a readable PRD must be produced.
+3. Run `/fix` on a planted bug inside `fb_test_alpha` — reproduce the bug, write a failing test, apply the fix.
+4. Carry back at least one improvement to flying_buttress following the carry-back rules (ADR-003).
 
-The v1 done condition from ADR-001: *five deliverables shipped and stable*. Check `docs/adr/ADR-001-v1-mvp-scope.md` to verify all five are in place before declaring v1 done.
+**Who runs it:** senior, with at least one junior observing. **Blocker:** `/fix` skill does not exist yet. Either build `/fix` first (v2 item) or run the milestone with a manual fix loop and note the gap.
 
 ---
 
@@ -54,6 +59,6 @@ After every `git commit` (not `--amend`), `scripts/update_docs_on_commit.py` run
 
 | File | Why you'd open it |
 |---|---|
-| `docs/adr/ADR-001-v1-mvp-scope.md` | v1 done condition — verify all five deliverables are in |
-| `backlog.md` | C4 deny list — the one remaining open item |
-| `.claude/settings.json` | Target if adding the deny list |
+| `docs/adr/ADR-004-factory-test-strategy.md` | Tier 2 milestone definition |
+| `scripts/scaffold.py` | Run the scaffold to create fb_test_alpha |
+| `CHANGELOG.md` | Track v1 → v2 transition |

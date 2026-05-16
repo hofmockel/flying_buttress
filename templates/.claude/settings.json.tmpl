@@ -5,6 +5,14 @@
       "Bash(git status)",
       "Bash(make*)",
       "Read(**)"
+    ],
+    "deny": [
+      "Bash(rm -rf*)",
+      "Bash(git push --force*)",
+      "Bash(git push --force-with-lease*)",
+      "Bash(git reset --hard*)",
+      "Bash(git clean -f*)",
+      "Read(.env*)"
     ]
   }
 }

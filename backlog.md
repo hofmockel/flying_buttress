@@ -98,7 +98,7 @@ The deny list was intentionally omitted from the v1 baseline to keep the allow l
 
 Same candidates apply to `templates/.claude/settings.json.tmpl` (minus the factory-specific `settings.local.json` entry).
 **Recommended action:** Add deny list to both files once the team has a session's worth of data on what the allow list covers. Review against G6 governance model before merging.
-**Status:** Open
+**Status:** Closed — deny list added to `.claude/settings.json` and `templates/.claude/settings.json.tmpl` on 2026-05-16. Factory-specific `Read(.claude/settings.local.json)` entry included in factory settings only, omitted from template.
 
 ---
 
