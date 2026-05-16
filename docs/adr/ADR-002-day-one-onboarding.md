@@ -1,6 +1,6 @@
 # ADR-002: Day 1 Onboarding Path
 
-**Status:** Proposed  
+**Status:** Accepted  
 **Date:** 2026-05-15  
 **Deciders:** Senior dev  
 **Fixes:** G3 — No Day 1 onboarding path  

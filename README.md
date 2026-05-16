@@ -205,6 +205,9 @@ flying_buttress/
 │
 ├── CLAUDE.md                   ← Claude Code entry point (router, not content)
 ├── ONBOARDING.md               ← 5-step path from clone to first PR
+├── MANUAL.md                   ← day-to-day operations reference
+├── backlog.md                  ← open gaps tied to ADRs
+├── review_plan.md              ← multi-perspective review lattice
 ├── Makefile                    ← durable workflow substrate
 ├── buttress.md                 ← the manifesto
 └── plan.md                     ← operating manual for Claude Code as factory floor

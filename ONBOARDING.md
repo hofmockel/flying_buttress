@@ -47,6 +47,7 @@ Implement the deliverable from the ADR you picked. Open a PR with:
 - A one-paragraph description: what changed and why.
 - The smoke checklist from `make validate-hooks` checked off.
 - If you carried back an improvement from a test project: a transcript excerpt or output artifact as evidence.
+- If Step 4 above gained a new required tool or the ADR sequence changed: update this file in the same PR.
 
 Self-merge after 48 hours if there is no blocking comment. The senior reviews at the weekly sync (Mondays).
 

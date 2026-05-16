@@ -1,6 +1,6 @@
 # ADR-003: Team Coordination Model
 
-**Status:** Proposed  
+**Status:** Accepted  
 **Date:** 2026-05-15  
 **Deciders:** Senior dev  
 **Fixes:** G2 — No team coordination model  

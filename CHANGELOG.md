@@ -7,15 +7,54 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Accept ADR-002/003; update docs; add post-commit CHANGELOG hook (`694287e`) — 2026-05-15
+
+## [0.1.0] - 2026-05-15
+
 ### Added
-- `settings.json` baseline (allow-only): `Bash(git status)`, `Bash(make*)`, `Read(**)` — factory repo and scaffolded-project template; deny list deferred to backlog (C4)
-- `ADR-001` accepted: v1 MVP scope locked — 8 deliverables in sequence, `/spec` end-to-end as the acceptance test
-- `CHANGELOG.md`: this file; tracks all notable changes from here forward
-- Factory development workflow (`plan.md` §10): sibling-repo testing pattern, less_tokens integration as a nested utility layer, scaffold-and-carry-back loop as the factory's test discipline
-- `review_plan.md`: multi-perspective review lattice — ten review kinds (spec, correctness, architecture, security, schema, rules, docs, perf, human, post-merge) and the five mechanisms that execute them (rules, skills, hooks, subagents, GitHub Actions)
+
+**Core documentation**
+- `README.md`: full project overview — quickstart, four-pillar model, lifecycle, six roles, feature table, project structure
+- `MANUAL.md`: comprehensive day-to-day operations reference — scaffold, `/spec`, Makefile, rules, permissions, ADRs, team coordination, lifecycle, extensibility, troubleshooting
+- `ONBOARDING.md`: Day 1 path (5 steps) from clone to first PR; addresses G3 from `backlog.md`
 - `buttress.md`: manifesto defining the flying_buttress software-factory concept and its tool-agnostic spec
-- `plan.md`: operating manual mapping the factory lifecycle onto Claude Code primitives (build environment, workflow, guardrails, governance, scaffolding menu)
+- `plan.md`: operating manual mapping the factory lifecycle onto Claude Code primitives (build environment, workflow, guardrails, governance, scaffolding menu); §10 documents sibling-repo testing pattern and `less_tokens` relationship
+- `review_plan.md`: multi-perspective review lattice — ten review kinds and five execution mechanisms (rules, skills, hooks, subagents, GitHub Actions)
+- `backlog.md`: gap registry — six critical gaps (G1–G6) and three smaller concerns (C1–C3) surfaced by architect review; each tied to an ADR
 - Exploratory source notes: `Core Components of a Modern "Super-Repo".md`, `Repo layout.md`, `claude-features.md`
+- `CHANGELOG.md`: this file
+
+**Architecture Decision Records**
+- `ADR-001` accepted: v1 MVP scope locked — 8 deliverables in sequence, `/spec` end-to-end as acceptance test
+- `ADR-002` (proposed): Day 1 onboarding path — 5-step sequence, `make validate-hooks` smoke gate
+- `ADR-003` (proposed): team coordination model — PR process, weekly sync cadence, carry-back arbitration, ownership table
+- `ADR-004` (proposed): factory test strategy — tier-1 smoke checklist (`make validate-hooks`), tier-2 scaffold integration test
+- `ADR-005` (proposed): Makefile underlay — every skill that shells out calls a Make target; Make is the durable substrate
+- `ADR-006` (proposed): settings governance — senior approval required for `.claude/settings.json` and `.agents/security.md` changes
+- `ADR-007` (proposed): documentation cleanup — resolves C1 (MCP convention), C2 (§11 agent SDK noise), C3 (model rubric cadence)
+
+**Templates** (`templates/` — stamped into every new project by `make scaffold`)
+- `CLAUDE.md.tmpl`: Claude Code entry point, pre-configured with `.agents/` pointer
+- `ONBOARDING.md.tmpl`: team onboarding doc template
+- `Makefile.tmpl`: quality gate stubs (`test`, `lint`, `fmt`, `validate-hooks`, `spec`, `help`)
+- `.agents/backend.md.tmpl`, `frontend.md.tmpl`, `testing.md.tmpl`, `security.md.tmpl`: domain rule templates with project-specific placeholders
+- `.claude/settings.json.tmpl`: permissions baseline (allow-only; deny list deferred — see C4 in `backlog.md`)
+- `.claude/skills/spec/SKILL.md.tmpl`: `/spec` skill template
+- `docs/specs/spec.md.tmpl`: blank spec template
+
+**Scripts and tooling**
+- `scripts/scaffold.py`: project scaffolder — copies `templates/`, substitutes `{{project_name}}`, `{{project_slug}}`, `{{date}}`, initializes git, optionally clones `less_tokens`
+- `Makefile`: factory-level workflow substrate — `scaffold`, `validate-hooks`, `spec`, `test`, `lint`, `fmt`, `help`
+
+**Factory domain rules** (`.agents/` — applies to the factory repo itself)
+- `.agents/backend.md`, `frontend.md`, `testing.md`, `security.md`
+
+**Factory skill**
+- `.claude/skills/spec/SKILL.md`: `/spec` — guided PRD generation with plan mode gate, Explore + Plan subagents, approval before any file write
+
+**Settings**
+- `.claude/settings.json` baseline (allow-only): `Bash(git status)`, `Bash(make*)`, `Read(**)` — deny list deferred to backlog (C4)
 - `.gitignore`: excludes `less_tokens/` (installed tooling managed separately from factory git history)
 
-[Unreleased]: https://github.com/hofmockel/flying_buttress/compare/HEAD...HEAD
+[Unreleased]: https://github.com/hofmockel/flying_buttress/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/hofmockel/flying_buttress/releases/tag/v0.1.0

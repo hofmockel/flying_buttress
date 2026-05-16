@@ -6,5 +6,20 @@
       "Bash(make*)",
       "Read(**)"
     ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 scripts/update_docs_on_commit.py 2>/dev/null || true",
+            "if": "Bash(git commit*)",
+            "statusMessage": "Updating docs..."
+          }
+        ]
+      }
+    ]
   }
 }

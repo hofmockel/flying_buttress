@@ -5,8 +5,8 @@ One ADR per gap from `backlog.md`. Execute in sequence — later ADRs depend on 
 | Order | ADR | Gap | Status |
 |---|---|---|---|
 | 1 | [ADR-001](ADR-001-v1-mvp-scope.md) | G1 — No v1 scope | Accepted |
-| 2 | [ADR-002](ADR-002-day-one-onboarding.md) | G3 — No Day 1 onboarding | Proposed |
-| 3 | [ADR-003](ADR-003-team-coordination.md) | G2 — No team coordination model | Proposed |
+| 2 | [ADR-002](ADR-002-day-one-onboarding.md) | G3 — No Day 1 onboarding | Accepted |
+| 3 | [ADR-003](ADR-003-team-coordination.md) | G2 — No team coordination model | Accepted |
 | 4 | [ADR-004](ADR-004-factory-test-strategy.md) | G4 — No factory test strategy | Proposed |
 | 5 | [ADR-005](ADR-005-makefile-underlay.md) | G5 — Vendor lock-in / no durable substrate | Proposed |
 | 6 | [ADR-006](ADR-006-settings-governance.md) | G6 — Settings governance absent | Proposed |

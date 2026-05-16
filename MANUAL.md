@@ -523,11 +523,17 @@ When you discover an improvement in a sibling project (a better rule, a more use
 
 | Artifact | Who can self-merge |
 |---|---|
-| Skills, specs, docs | Any developer after 48h |
-| `.agents/*.md` (non-security) | Any developer after 48h |
-| `.agents/security.md` | Senior approval required |
+| `ONBOARDING.md`, `CLAUDE.md`, `backlog.md` | Any developer after 48h |
+| Skills under `.claude/skills/` | Junior (assigned per ADR) after 48h |
+| `docs/adr/` files | Whoever writes the ADR; senior approval to advance status to Accepted |
+| `.agents/*.md` | Senior approval required |
 | `.claude/settings.json` | Senior approval required |
-| ADR status changes | Senior approval required |
+
+### Memory
+
+Memory files live at `~/.claude/projects/<repo>/memory/` — per-machine, not committed. They are not shared across developers. The only shared persistent state is what's in the repo.
+
+Don't put decisions in memory that the team needs to share. Those go in ADRs or `backlog.md`.
 
 ---
 
@@ -579,6 +585,7 @@ commit → lint → type-check → test → security scan → preview deploy →
 - Update `.agents/*.md` when you discover a new constraint the codebase consistently needs.
 - Run `anthropic-skills:consolidate-memory` weekly to keep Claude's memory of the project accurate.
 - Session transcripts are searchable (`mcp__ccd_session_mgmt__search_session_transcripts`). ADRs should cite the session in which a decision was made.
+- Use `review_plan.md` as the review reference — it defines the ten review kinds and five mechanisms. Run the relevant review kind for each PR type.
 
 ---
 
@@ -714,7 +721,8 @@ Alternatively, the `fewer-permission-prompts` skill can audit recent session tra
 | `MANUAL.md` | This document |
 | `buttress.md` | Philosophy and methodology |
 | `plan.md` | Claude Code operating manual |
-| `backlog.md` | Open gaps and their status |
+| `backlog.md` | Open gaps tied to ADRs |
+| `review_plan.md` | Ten review kinds and five execution mechanisms |
 | `docs/adr/README.md` | ADR index and work queue |
 | `.agents/*.md` | Domain rules |
 | `.claude/settings.json` | Permissions policy |
