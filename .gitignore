@@ -1,2 +1,11 @@
 less_tokens/
 sandbox/
+.venv/
+schema/
+
+# >>> less_tokens (generated artifacts) >>>
+/index.db
+/index.db-wal
+/index.db-shm
+/.claude/state/
+# <<< less_tokens <<<
