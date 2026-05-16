@@ -30,9 +30,9 @@ If a workflow can be expressed in a Claude Code skill, it should be. If a safety
 
 Three audiences, all inward-facing:
 
-- **Solo builder running the factory** — read in order; §4–§7 are load-bearing; §13 is the working menu.
-- **Collaborator inheriting it** — start with §3 (pillars overview) and §9 (lifecycle table), then §13 (the menu of what's been scaffolded).
-- **Template-cloner forking it** — start with §1–§3, then jump to §13 to understand what comes with the box.
+- **Solo builder running the factory** — read in order; §4–§7 are load-bearing; §14 is the working menu.
+- **Collaborator inheriting it** — start with §3 (pillars overview) and §9 (lifecycle table), then §14 (the menu of what's been scaffolded).
+- **Template-cloner forking it** — start with §1–§3, then jump to §14 to understand what comes with the box.
 
 ---
 
@@ -55,7 +55,7 @@ The factory rests on four Claude-Code-native pillars. Each gets a deep dive in �
 - **Guardrails** (§6) — the automated rails that turn intent into safety. Hooks are the primary mechanism. Permissions cascade. Plan mode gates approval. Worktrees and subagent isolation protect blast radius.
 - **Governance** (§7) — the rules and learning layer that compounds across sessions. Context files cascade. Memory persists. Skills encode procedure. Transcripts are the audit trail. `settings.json` is policy-as-code.
 
-MCP (§8) is the nervous system that connects the factory to the outside world. The lifecycle (§9) is how all of this sequences from sketch to operate.
+MCP (§8) is the nervous system that connects the factory to the outside world. The lifecycle (§9) is how all of this sequences from sketch to operate. §10 describes how the factory is developed and tested without contaminating its own repo.
 
 ---
 
@@ -155,7 +155,7 @@ Built-in subagents the factory uses:
 - **general-purpose** — open-ended multi-step research when no specialist fits.
 - **claude-code-guide** — questions about Claude Code features themselves.
 
-Custom subagents the factory could author (see §13.5):
+Custom subagents the factory could author (see §14.5):
 
 - **schema-checker** — validates changed schemas against committed contracts
 - **doc-keeper** — checks that runbooks and changelogs were updated alongside features
@@ -419,26 +419,107 @@ The four lifecycle phases from `buttress.md` §5, expressed as concrete Claude C
 
 ---
 
-## 10. The Agent SDK and publishing outward
+## 10. Factory development workflow
 
-### 10.1 Eventual goal
+### 10.1 The two-repo distinction
+
+flying_buttress is the workbench. Projects built with it are the output. These must never share a git history.
+
+- **flying_buttress** — the factory itself. CLAUDE.md templates, skills, hooks, settings patterns, and scaffolding tooling live here. Only flying_buttress artifacts get committed to this repo.
+- **Sibling repos** — projects scaffolded from flying_buttress. Each has its own git repo and history. Improvements observed while building them flow back to flying_buttress manually.
+- **less_tokens** — a special case: a token-reduction utility that installs *on top of* flying_buttress (and any other project). It is not built with the factory; it augments it.
+
+### 10.2 less_tokens as a nested utility
+
+`less_tokens` is a toolkit that reduces Claude's token consumption via four strategies: vector search over the codebase (search before Read), terse output enforcement (caveman mode), tool output truncation, and session compaction. It is cloned *into* the flying_buttress directory and its installer targets the parent:
+
+```bash
+cd flying_buttress
+git clone https://github.com/<you>/less_tokens.git
+python3 less_tokens/install.py   # installs hooks and tools into flying_buttress/
+```
+
+`less_tokens/` is gitignored in flying_buttress — it has its own repo and history. To upgrade:
+
+```bash
+cd less_tokens && git pull && python3 install.py
+```
+
+`less_tokens` is not a project produced by the factory. It is infrastructure the factory runs on.
+
+### 10.3 Test project architecture: sibling repos
+
+To validate the factory, test projects live as sibling repos next to flying_buttress, never inside it:
+
+```
+~/Documents/GitHub/
+  flying_buttress/          ← this repo; stays clean
+  fb_test_alpha/            ← scaffolded with /scaffold; its own git repo
+  fb_test_beta/             ← another test project; its own git repo
+```
+
+The test project is created by running `/scaffold` (see §14.1) from within flying_buttress, targeting a directory outside the repo. The factory's templates are copied into the new repo; flying_buttress's git history is never touched.
+
+**The rule:** improvements discovered while building in a test project are carried back manually and committed to flying_buttress. Test project files never enter flying_buttress's index.
+
+### 10.4 The scaffold-and-carry-back loop
+
+The development loop for improving the factory:
+
+1. **Scaffold** — run `/scaffold` to stamp out a sibling test project from the current factory state
+2. **Build** — work in the test project, using and stressing the factory's skills, hooks, and templates
+3. **Observe** — note what's missing, wrong, or improvable in the factory
+4. **Carry back** — switch to flying_buttress, apply the improvements, commit
+5. **Repeat** — the next test project inherits the improved factory
+
+This loop *is* the factory's test suite. There is no automated end-to-end test; the test is "can we build something real with it?"
+
+### 10.5 What /scaffold must do
+
+The `/scaffold` skill (see §14.1) must:
+
+1. Accept a target path — a sibling directory outside flying_buttress
+2. Stamp out the CLAUDE.md hierarchy, `.agents/` rules, skills, hooks, and `settings.json` patterns into that path
+3. Initialize a git repo in the target if none exists
+4. Optionally install `less_tokens` by cloning it into the new project (prompted)
+5. Never write any files back into flying_buttress as a side effect of scaffolding
+
+### 10.6 Sandbox for throwaway experiments
+
+For quick experiments that won't become real projects, a `sandbox/` directory inside flying_buttress can be used. It is gitignored and discarded freely. The distinction:
+
+- **`sandbox/`** — throwaway; no git history; discarded after the experiment
+- **sibling repo** — keeper; has its own git history; may become a real project
+
+The `.gitignore` stays minimal:
+
+```
+less_tokens/
+sandbox/
+```
+
+---
+
+## 11. The Agent SDK and publishing outward
+
+### 11.1 Eventual goal
 
 Skills, subagents, and hooks authored in flying_buttress should be reusable. The Agent SDK is the publishing surface — the path by which the factory's tooling reaches other forks and the broader community.
 
-### 10.2 What this requires
+### 11.2 What this requires
 
 - **Stable skill interfaces** — name, description, expected inputs, produced artifacts. Once shipped, they don't break.
 - **Idempotent hooks** — running a hook twice produces the same result.
 - **Portable `settings.json` patterns** — the policy file should work across project shapes, not just this one.
 - **Self-contained subagents** — defined in a way that a fresh clone can use them without local state.
 
-### 10.3 Scope today
+### 11.3 Scope today
 
 Load-bearing-soon, not now. v1 scaffolding focuses on getting the factory working *here*; v2 is when artifacts become publishable. Mentioned in this doc so v1 designs forecast the constraint.
 
 ---
 
-## 11. Feature-to-role mapping table
+## 12. Feature-to-role mapping table
 
 Every Claude Code feature mapped to a pillar and a role. Features without a current role are flagged honestly.
 
@@ -494,13 +575,15 @@ Every Claude Code feature mapped to a pillar and a role. Features without a curr
 | `pptx`/`pdf`/`xlsx`/`docx` skills | Speculative | Ops/reporting candidates |
 | `keybindings-help` skill | Unused | Personal config; out of scope here |
 | `morning` skill | Unused | Domain-specific (portfolio); illustrative pattern only |
+| `less_tokens` (nested utility) | Build env | Token reduction layer installed on top of flying_buttress; not a project produced by the factory |
+| `/scaffold` skill | Workflow | Stamps out sibling test projects; the mechanism for the scaffold-and-carry-back loop (§10) |
 | `setup-cowork` skill | Build env | Onboarding helper; one-time use |
 | `loop`, `schedule` skills (the meta-skills) | Workflow | Skill-tooling for skill-authoring |
 | `skill-creator` skill | Build env | Authoring new skills |
 
 ---
 
-## 12. Speculative possibilities
+## 13. Speculative possibilities
 
 Three buckets. Every Claude Code feature lands in exactly one.
 
@@ -513,8 +596,9 @@ Three buckets. Every Claude Code feature lands in exactly one.
 - CLAUDE.md hierarchy + `.agents/*.md`
 - Plan mode + worktrees
 - Model selection
-- `/review`, `/security-review`, `bugfix` skills
+- `/review`, `/security-review`, `/scaffold`, `bugfix` skills
 - `claude-preview` and `claude-in-chrome` MCP connectors
+- `less_tokens` installed as the token-reduction layer
 
 **Load-bearing soon.** Features earmarked for v2 once v1 ships a vertical slice:
 
@@ -536,23 +620,23 @@ Three buckets. Every Claude Code feature lands in exactly one.
 
 ---
 
-## 13. Scaffolding possibilities (the menu)
+## 14. Scaffolding possibilities (the menu)
 
 A possibility survey — not a commitment plan. Each entry is something that *could* be scaffolded with the features above. Sequencing is deferred.
 
-### 13.1 Skills we could author
+### 14.1 Skills we could author
 
 - `/spec` — generate PRD, task list, tests, draft PR for a new feature
 - `/fix` — atomic TDD bug fix
 - `/refactor` — map dependencies, propose design, migrate incrementally
-- `/scaffold` — generate a new app or package from the template
+- `/scaffold` — stamp out a new sibling project from flying_buttress; accepts a target path outside the repo, copies the CLAUDE.md hierarchy, `.agents/` rules, skills, hooks, and `settings.json` patterns into it, initializes a git repo there, and optionally installs `less_tokens` by cloning it into the new project; never writes back to flying_buttress
 - `/bootstrap` — fork-time wizard that fills in role choices from `buttress.md` §3
 - `/adr` — author or amend an Architecture Decision Record
 - `/runbook` — generate a runbook stub for a new feature
 - `/promote` — graduate a prototype from `/apps/prototype/` to a real surface
 - `/audit` — run all governance checks and produce a status report
 
-### 13.2 Hooks we could write
+### 14.2 Hooks we could write
 
 - **PreToolUse(Bash)** — block destructive patterns (`rm -rf /`, force-push to main, hard reset)
 - **PreToolUse(Bash)** — block secret leakage in command lines
@@ -564,14 +648,14 @@ A possibility survey — not a commitment plan. Each entry is something that *co
 - **Stop** — prompt for changelog entry when ending a feature-branch session
 - **PreCompact** — archive transcript to `docs/transcripts/` before compression
 
-### 13.3 `settings.json` possibilities
+### 14.3 `settings.json` possibilities
 
 - `permissions.allow` — common read-only ops, project-scoped writes
 - `permissions.deny` — operations on `.git/` internals, secrets paths, generated or vendored directories
-- `hooks` — entries from §13.2
+- `hooks` — entries from §14.2
 - `env` — model preference, fast-mode default, project flags
 
-### 13.4 CLAUDE.md sections we could define
+### 14.4 CLAUDE.md sections we could define
 
 - **Project overview** — one paragraph; routes to `buttress.md`
 - **Operating manual** — routes to `plan.md` (this doc)
@@ -580,14 +664,14 @@ A possibility survey — not a commitment plan. Each entry is something that *co
 - **Memory** — routes to `~/.claude/projects/flying_buttress/memory/MEMORY.md`
 - **Gotchas** — load-bearing exceptions specific to this repo (e.g., paths that must not be edited by hand)
 
-### 13.5 Custom subagents we could define
+### 14.5 Custom subagents we could define
 
 - **security-reviewer-deep** — slow, thorough; runs in a worktree against a PR diff
 - **schema-checker** — runs Pydantic/Zod validators on changed schemas
 - **doc-keeper** — checks runbooks and changelogs were updated alongside features
 - **transcript-archivist** — periodically archives and indexes session transcripts
 
-### 13.6 MCP connectors we could install
+### 14.6 MCP connectors we could install
 
 - **Load-bearing first wave** — `claude-in-chrome`, `claude-preview`, `ccd_directory`, `scheduled-tasks`, `ccd_session_mgmt`, `mcp-registry`
 - **Speculative additions** — custom MCP servers wrapping project-specific systems (deferred)
