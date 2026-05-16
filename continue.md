@@ -3,55 +3,106 @@
 > Pick up here in the next session.
 
 **Repo:** `flying_buttress` — a software factory for AI-native development  
-**Branch:** `main` (clean, pushed, up to date)  
-**Last commit:** pending — v1 complete
+**Branch:** `main` (clean, committed through `8cc1253`)  
+**State:** v1 complete. All seven ADRs accepted. Backlog clear.
 
 ---
 
-## What was done this session
+## What v1 contains (all verified present)
 
-1. **Committed hooks and tooling** — `.claude/hooks/`, `tools/`, updated `settings.json` and `.gitignore` were untracked; committed them. `.venv/` and `schema/` added to `.gitignore`.
-
-2. **Accepted ADR-006** (settings governance) — MANUAL.md §7 expanded with trigger list and review checklist. ADR-006 marked Accepted; G6 closed.
-
-3. **Accepted ADR-007** (doc cleanup) — Three targeted `plan.md` edits: C1 convention note in §8.4, C2 §11 collapsed, C3 quarterly review cadence in §4.4. ADR-007 marked Accepted; C1/C2/C3 closed.
-
-4. **C4 deny list added** — deny rules added to `.claude/settings.json` and `templates/.claude/settings.json.tmpl`. All eight v1 deliverables verified present. **v1 declared complete.**
-
----
-
-## ADR status
-
-| ADR | Gap | Status |
-|---|---|---|
-| ADR-001 | G1 — v1 MVP scope | **Accepted** |
-| ADR-002 | G3 — Day 1 onboarding | **Accepted** |
-| ADR-003 | G2 — Team coordination | **Accepted** |
-| ADR-004 | G4 — Factory test strategy | **Accepted** |
-| ADR-005 | G5 — Makefile underlay | **Accepted** |
-| ADR-006 | G6 — Settings governance | **Accepted** |
-| ADR-007 | C1/C2/C3 — Doc cleanup | **Accepted** |
-
-**All seven ADRs accepted. Backlog clear. v1 complete.**
+| Deliverable | Location |
+|---|---|
+| Root `CLAUDE.md` | `CLAUDE.md` |
+| `.agents/` rules | `.agents/{backend,frontend,testing,security}.md` |
+| `settings.json` baseline + deny list | `.claude/settings.json` |
+| `/spec` skill | `.claude/skills/spec/SKILL.md` |
+| `ONBOARDING.md` | `ONBOARDING.md` |
+| `Makefile` (6 targets) | `Makefile` |
+| `templates/` | `templates/` |
+| `scripts/scaffold.py` | `scripts/scaffold.py` |
 
 ---
 
-## Next step: Tier 2 integration milestone (ADR-004)
+## What comes next: the Tier 2 integration milestone
 
-v1 is done. The next gate before v2 work starts is the **Tier 2 integration milestone** from ADR-004:
+Before any v2 features start, the factory must pass this milestone (ADR-004 §Tier 2). It proves the factory works end-to-end on a real project, not just in theory.
 
-1. Run `make scaffold TARGET=../fb_test_alpha` to stamp out a sibling test project.
-2. Run `/spec` inside `fb_test_alpha` on a real problem — a readable PRD must be produced.
-3. Run `/fix` on a planted bug inside `fb_test_alpha` — reproduce the bug, write a failing test, apply the fix.
-4. Carry back at least one improvement to flying_buttress following the carry-back rules (ADR-003).
+**Who runs it:** senior, with at least one junior observing.
 
-**Who runs it:** senior, with at least one junior observing. **Blocker:** `/fix` skill does not exist yet. Either build `/fix` first (v2 item) or run the milestone with a manual fix loop and note the gap.
+### Step 1 — Scaffold a test project
+
+```bash
+make scaffold TARGET=../fb_test_alpha
+cd ../fb_test_alpha
+make validate-hooks   # all checks should be green
+```
+
+Confirm Claude Code opens correctly inside `fb_test_alpha`:
+
+```bash
+claude
+# ask: "What is this project and how is it structured?"
+# CLAUDE.md should orient correctly
+```
+
+### Step 2 — Run /spec on a real problem
+
+Inside `fb_test_alpha`, open Claude Code and run:
+
+```
+/spec <a real, non-toy feature for the test project>
+```
+
+Pass condition: a readable PRD is written to `docs/specs/<slug>.md`. The plan mode gate must engage (Claude asks for approval before writing).
+
+### Step 3 — Plant and fix a bug
+
+Plant a deliberate bug in `fb_test_alpha` (a function that returns the wrong value, a missing guard, etc.). Then either:
+
+- **If `/fix` exists by then:** run `/fix` — it should reproduce the bug, write a failing test, and apply the fix.
+- **If `/fix` does not exist yet:** fix it manually using Claude Code, document the gap, and note it as a carry-back candidate.
+
+Pass condition: the bug is reproduced, a test exists that catches it, and the fix is committed.
+
+### Step 4 — Carry back at least one improvement
+
+Anything observed during the milestone that would improve the factory (a better rule, a Makefile gap, a CLAUDE.md wording issue, a skill edge case) should be carried back to `flying_buttress` per ADR-003:
+
+1. Open a PR against `flying_buttress` — not `fb_test_alpha`.
+2. Include evidence it works (transcript excerpt, output artifact, or screenshot).
+3. "I tested it and it works" with no artifact is not acceptable (Tier 3 gate, ADR-004).
+
+### Milestone pass condition
+
+All four steps complete with no open blockers. If any step fails, open an issue in `flying_buttress`, fix it, and re-run from Step 1.
+
+---
+
+## The blocker: /fix does not exist
+
+`/fix` is not built yet. Two options:
+
+**Option A — Build /fix first (recommended).** `/fix` is a v2 item but the milestone depends on it. Build it as a first v2 deliverable before running the milestone. The skill should: reproduce the bug, write a failing test, apply the minimal fix, run `make test`, and commit. Follow the same pattern as `/spec` — Make target first, skill calls it.
+
+**Option B — Run the milestone without /fix.** Fix the planted bug manually in a Claude Code session. Document the fix steps and note them as the specification for `/fix`. This gives real data for the skill design before writing it.
+
+---
+
+## v2 candidate deliverables (not yet scoped)
+
+From `plan.md` §13 "load-bearing soon" list — not committed, just the queue to draw from:
+
+- `/fix` skill — atomic bug fix with TDD loop
+- `/review` skill — code review against `.agents/` rules  
+- PostToolUse hooks — format, type-check, test on save
+- PreToolUse hook — MCP compliance guardrail (C1 v2 candidate)
+- `/scaffold` skill — wraps `make scaffold` with guided prompts
 
 ---
 
 ## Active hook to be aware of
 
-After every `git commit` (not `--amend`), `scripts/update_docs_on_commit.py` runs and updates `CHANGELOG.md`. The updated file will be unstaged — amend with `git commit --amend --no-edit` to fold it in, or let it ride into the next commit.
+After every `git commit` (not `--amend`), `scripts/update_docs_on_commit.py` runs and inserts a bullet under `## [Unreleased]` in `CHANGELOG.md`. The file will be unstaged after every commit — fold it in with `git commit --amend --no-edit` or let it ride into the next commit.
 
 ---
 
@@ -59,6 +110,9 @@ After every `git commit` (not `--amend`), `scripts/update_docs_on_commit.py` run
 
 | File | Why you'd open it |
 |---|---|
-| `docs/adr/ADR-004-factory-test-strategy.md` | Tier 2 milestone definition |
-| `scripts/scaffold.py` | Run the scaffold to create fb_test_alpha |
-| `CHANGELOG.md` | Track v1 → v2 transition |
+| `docs/adr/ADR-004-factory-test-strategy.md` | Full Tier 2 milestone spec |
+| `docs/adr/ADR-003-team-coordination.md` | Carry-back rules for Step 4 |
+| `scripts/scaffold.py` | What `make scaffold` calls |
+| `templates/` | What gets stamped into `fb_test_alpha` |
+| `.claude/skills/spec/SKILL.md` | Reference when building `/fix` |
+| `MANUAL.md` §10 | Integration milestone also documented here |

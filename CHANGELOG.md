@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- continue.md: expand Tier 2 milestone with step-by-step instructions and /fix options (`e519798`) — 2026-05-16
+
 - C4: add deny list to settings.json and template; declare v1 complete (`ea6df07`) — 2026-05-16
 
 - ADR-007: accept doc cleanup; fix C1/C2/C3 in plan.md (`8e9b814`) — 2026-05-16
