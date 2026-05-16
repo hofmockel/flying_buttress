@@ -65,21 +65,21 @@ The scaffold-and-carry-back loop (§10.4) is a manual, single-developer discipli
 ### C1 — "All integrations through MCP" rule is a convention, not a guardrail
 §8.4 states the rule but there's no hook that detects when an agent shells out to an external system without going through MCP. It's enforced by convention only.
 **Recommended action:** Name it explicitly as a convention in the document. Optionally: write a PreToolUse hook that audits Bash calls for common external-system patterns (curl, direct DB calls, etc.) and warns.
-**Status:** Open
+**Status:** Closed — ADR-007 accepted 2026-05-16. Convention note added to plan.md §8.4; v2 hook flagged as candidate.
 
 ---
 
 ### C2 — §11 (Agent SDK publishing) is premature noise
 For a small team on a first project, this section costs reading time and signals ambition that isn't load-bearing. It should be a footnote or cut entirely from v1 documentation.
 **Recommended action:** Move §11 to a `future.md` or collapse it to a two-sentence note at the bottom of §13.
-**Status:** Open
+**Status:** Closed — ADR-007 accepted 2026-05-16. plan.md §11 collapsed to a single-paragraph footnote.
 
 ---
 
 ### C3 — Model selection rubric will drift faster than the document
 Model capabilities change faster than docs do. The rubric in §4.4 is stated as settled fact but will be wrong within months.
 **Recommended action:** Add a review cadence note to §4.4: "Review this table quarterly against current Anthropic release notes."
-**Status:** Open
+**Status:** Closed — ADR-007 accepted 2026-05-16. Quarterly review cadence note added to plan.md §4.4.
 
 ---
 

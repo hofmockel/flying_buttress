@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- ADR-007: accept doc cleanup; fix C1/C2/C3 in plan.md (`8e9b814`) — 2026-05-16
+
 - ADR-006: accept settings governance; expand MANUAL.md §7 with PR trigger list (`9a03932`) — 2026-05-16
 
 - Add Claude Code hooks and vector search tooling; update settings and gitignore (`5a1d6b1`) — 2026-05-16

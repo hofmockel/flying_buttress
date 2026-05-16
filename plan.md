@@ -102,6 +102,8 @@ Four modes, each with a clear "when to choose":
 
 Default in `settings.json` is the most cost-effective model that meets the bar for the phase. Override per session if the work demands more.
 
+**Review cadence:** Check this table quarterly against Anthropic's release notes. Model capabilities and pricing change faster than documents do; a stale rubric produces bad cost/quality decisions.
+
 ### 4.5 Context discipline
 
 Long-context windows are not free. The factory enforces three habits:
@@ -398,6 +400,8 @@ A governance choice with safety implications. When every external dependency is 
 
 If an integration cannot be expressed as MCP today, the factory wraps it in a CLI tool first, then promotes that to an MCP server later.
 
+**Note:** This "all integrations through MCP" rule is enforced by convention, not by an automated guardrail. There is no hook today that detects when an agent shells out to an external system without going through MCP. Teams must rely on code review and the carry-back culture (ADR-003) to maintain it. A PreToolUse hook enforcing this is a candidate for v2.
+
 ---
 
 ## 9. The lifecycle, mapped to Claude Code
@@ -504,20 +508,7 @@ sandbox/
 
 ## 11. The Agent SDK and publishing outward
 
-### 11.1 Eventual goal
-
-Skills, subagents, and hooks authored in flying_buttress should be reusable. The Agent SDK is the publishing surface — the path by which the factory's tooling reaches other forks and the broader community.
-
-### 11.2 What this requires
-
-- **Stable skill interfaces** — name, description, expected inputs, produced artifacts. Once shipped, they don't break.
-- **Idempotent hooks** — running a hook twice produces the same result.
-- **Portable `settings.json` patterns** — the policy file should work across project shapes, not just this one.
-- **Self-contained subagents** — defined in a way that a fresh clone can use them without local state.
-
-### 11.3 Scope today
-
-Load-bearing-soon, not now. v1 scaffolding focuses on getting the factory working *here*; v2 is when artifacts become publishable. Mentioned in this doc so v1 designs forecast the constraint.
+Skills, subagents, and hooks authored here should eventually be publishable via the Agent SDK — but only once they're stable. v1 does not design for this. When the factory has survived one real sibling project end-to-end, revisit which artifacts are worth publishing and what stable interfaces they require.
 
 ---
 

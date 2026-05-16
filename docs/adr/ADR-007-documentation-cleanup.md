@@ -1,6 +1,6 @@
 # ADR-007: Documentation Cleanup
 
-**Status:** Proposed  
+**Status:** Accepted  
 **Date:** 2026-05-15  
 **Deciders:** Senior dev  
 **Fixes:** C1, C2, C3 — Minor concerns from architect review  

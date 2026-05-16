@@ -10,7 +10,7 @@ One ADR per gap from `backlog.md`. Execute in sequence — later ADRs depend on 
 | 4 | [ADR-004](ADR-004-factory-test-strategy.md) | G4 — No factory test strategy | Accepted |
 | 5 | [ADR-005](ADR-005-makefile-underlay.md) | G5 — Vendor lock-in / no durable substrate | Accepted |
 | 6 | [ADR-006](ADR-006-settings-governance.md) | G6 — Settings governance absent | Accepted |
-| 7 | [ADR-007](ADR-007-documentation-cleanup.md) | C1, C2, C3 — Minor doc concerns | Proposed |
+| 7 | [ADR-007](ADR-007-documentation-cleanup.md) | C1, C2, C3 — Minor doc concerns | Accepted |
 
 **Why this order:** ADR-001 defines the scope everyone works within. ADR-002 unblocks junior developers immediately. ADR-003 defines how changes flow. ADR-004 defines what "done" means before carry-backs start. ADR-005 and ADR-006 are strategic — important but not day-one blockers. ADR-007 is doc cleanup that can happen anytime.
 
