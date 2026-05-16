@@ -1,6 +1,6 @@
 # ADR-006: Settings Governance
 
-**Status:** Proposed  
+**Status:** Accepted  
 **Date:** 2026-05-15  
 **Deciders:** Senior dev  
 **Fixes:** G6 — Permission model coarse and its governance absent  

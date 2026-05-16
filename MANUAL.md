@@ -421,14 +421,29 @@ Project settings override user settings for conflicting keys. Local settings ove
 
 **Rule of thumb:** if you find yourself keeping a local override for more than a week, it belongs either in a PR to `settings.json` or in your personal `~/.claude/settings.json`.
 
-### Changing project settings
+### What requires a settings PR
 
-Changes to `.claude/settings.json` require senior approval before merge — they affect every developer. See [ADR-006](docs/adr/ADR-006-settings-governance.md) for the full governance model.
+Any of the following changes to `.claude/settings.json` requires a PR with **explicit senior approval** — not subject to the 48h self-merge rule:
 
-When submitting a settings PR, answer these in the description:
-- Is this the most targeted change possible?
-- Does a new deny rule risk blocking legitimate operations?
-- Does a new allow rule introduce a security surface?
+- Adding or removing a permission (`allow` or `deny` entry)
+- Adding, modifying, or removing a hook entry
+- Changing the default model or env vars
+- Changing the `mcpServers` block
+
+Changes to `settings.local.json` or `~/.claude/settings.json` do not require a PR (neither is committed).
+
+### Settings PR review checklist (senior)
+
+When reviewing a settings PR, check:
+
+```
+- [ ] Is this the most targeted change possible? (Prefer scoped allows over broad ones.)
+- [ ] Does a new deny rule risk blocking legitimate team operations?
+- [ ] Does a new allow rule introduce a security surface?
+- [ ] Is the change documented with a comment in the file?
+```
+
+See [ADR-006](docs/adr/ADR-006-settings-governance.md) for the full governance model. If the senior is unavailable for more than 48h, they should designate a backup reviewer rather than letting settings PRs block.
 
 ---
 

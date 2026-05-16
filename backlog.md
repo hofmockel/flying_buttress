@@ -56,7 +56,7 @@ The scaffold-and-carry-back loop (§10.4) is a manual, single-developer discipli
 **Problem:** The `settings.json` policy-as-code idea is good, but the governance of the policy itself is unspecified. Open questions: Who can change project-level policy? Is a settings change a PR or unilateral? What happens when a developer's local override conflicts with team policy? The plan names the mechanism but not the rules for changing it.
 **Recommended action:** Add a short "settings governance" section: who can merge changes to `.claude/settings.json`, what review is required, and how local overrides are handled.
 **Owner:** TBD
-**Status:** Open
+**Status:** Closed — ADR-006 accepted 2026-05-16. File-by-file rules, PR trigger list, and senior review checklist documented in MANUAL.md §7. `_comment` key in settings.json names the owner and links ADR-006.
 
 ---
 

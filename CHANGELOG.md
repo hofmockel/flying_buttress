@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- ADR-006: accept settings governance; expand MANUAL.md §7 with PR trigger list (`9a03932`) — 2026-05-16
+
 - Add Claude Code hooks and vector search tooling; update settings and gitignore (`5a1d6b1`) — 2026-05-16
 
 - ADR-005: accept Makefile underlay; anchor plan.md §5.1 to concrete spec (`357f331`) — 2026-05-16
