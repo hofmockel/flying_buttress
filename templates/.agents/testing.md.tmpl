@@ -1,0 +1,20 @@
+# Testing rules — {{project_name}}
+
+## Requirements
+- Every bug fix includes a failing test reproducing the bug before the fix — no exceptions
+- Tests live next to the code they test
+- No mocking the database in integration tests; use a real test database
+- Test names describe observable behavior, not implementation
+
+## What to test
+- Happy path, boundary conditions, expected failure modes, integration with real dependencies
+
+## What not to test
+- Framework internals, implementation details the type system rules out
+
+## CI
+- Every PR passes the full test suite before merge
+- Flaky tests are bugs: fix or delete, never skip
+
+---
+_Add project-specific testing conventions here (framework, coverage targets, fixture patterns)._

@@ -1,0 +1,10 @@
+{
+  "_comment": "Owner: senior dev. Changes require senior approval before merge. See docs/adr/ADR-006-settings-governance.md",
+  "permissions": {
+    "allow": [
+      "Bash(git status)",
+      "Bash(make*)",
+      "Read(**)"
+    ]
+  }
+}

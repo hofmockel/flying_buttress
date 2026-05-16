@@ -1,0 +1,67 @@
+---
+name: spec
+description: Generate a PRD, task list, and draft implementation plan for a new feature. Use when starting any non-trivial work that touches more than one file or surface. Enters plan mode and requires explicit approval before writing anything to disk. Triggers for "spec for X", "write a spec", "plan feature X", "I want to build X".
+---
+
+# /spec workflow
+
+## Rules
+- Never write files until ExitPlanMode is called. Plan mode is the gate.
+- Never skip AskUserQuestion. The user must approve the plan before it is written.
+- The spec slug must be unique. Check docs/specs/ for existing slugs before writing.
+
+## Steps
+
+### 1. Enter plan mode
+Call EnterPlanMode immediately. Do not read files or write anything until you are in plan mode.
+
+### 2. Gather context
+Use the Explore subagent to map what already exists that this feature touches or depends on.
+
+### 3. Draft the plan
+Use the Plan subagent to produce an implementation strategy covering:
+- What the feature does (one paragraph)
+- Files to create or change, with one-line descriptions
+- Tests to write
+- Open questions that must be answered before implementation starts
+
+### 4. Confirm with the user
+Call AskUserQuestion. Present the plan summary and open questions. Do not proceed if the user has concerns.
+
+### 5. Exit plan mode
+Call ExitPlanMode. This is the approval gate.
+
+### 6. Write the spec
+Write to `docs/specs/<slug>.md`:
+
+```
+# Spec: <feature name>
+
+**Slug:** <slug>
+**Date:** <YYYY-MM-DD>
+**Status:** Draft
+
+## Problem
+<One paragraph.>
+
+## Proposed solution
+<One paragraph.>
+
+## Scope
+### In scope
+- <item>
+### Out of scope
+- <item>
+
+## Implementation plan
+<Ordered list: file path — what changes>
+
+## Tests
+<List of tests to write>
+
+## Open questions
+<Remove when resolved.>
+```
+
+### 7. Report
+Tell the user where the spec was written and what comes next.

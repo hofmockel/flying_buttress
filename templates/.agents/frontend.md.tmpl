@@ -1,0 +1,25 @@
+# Frontend rules — {{project_name}}
+
+## Boundaries
+- No inline styles; use the project's design token system
+- No direct DOM manipulation outside of framework primitives
+- All user inputs validated before submission, not only on error return
+- Every interactive element has a keyboard equivalent and ARIA label where needed
+
+## Naming
+- Components: `PascalCase`
+- Files: `kebab-case.tsx`
+- Event handlers: `on` + PascalCase verb (`onClick`, `onSubmit`)
+
+## State
+- Prefer local component state; lift only when siblings genuinely share it
+- No client-side state for data that belongs on the server
+- Derived values are computed, not stored
+
+## Structure
+- One component per file
+- Keep components under ~150 lines; extract rather than grow
+- Data fetching lives at route/page level, not in leaf components
+
+---
+_Extend these rules with project-specific conventions as the codebase grows._

@@ -1,0 +1,40 @@
+# Onboarding — {{project_name}}
+
+Scaffolded from [flying_buttress](https://github.com/hofmockel/flying_buttress) on {{date}}.
+
+---
+
+## Step 1 — Understand the project (15 min, one-time)
+
+Read [CLAUDE.md](CLAUDE.md). Then read the open ADRs in [docs/adr/README.md](docs/adr/README.md).
+
+Goal: know what this project is building and what decisions have already been made.
+
+---
+
+## Step 2 — Pick up a task
+
+Find the lowest-numbered ADR with status **Proposed**. That is the next thing to build.
+
+If all ADRs are Accepted, ask the lead developer what's next.
+
+---
+
+## Step 3 — Set up your environment
+
+1. Clone the repo.
+2. Install [Claude Code CLI](https://claude.ai/code) if not already installed.
+3. Run `claude` from the repo root and confirm it loads `CLAUDE.md`.
+4. Run `make validate-hooks` — all checks should pass green.
+
+_Update this section when the project gains new required tools._
+
+---
+
+## Step 4 — Open your first PR
+
+- Title: one line naming what you built
+- Body: one paragraph — what changed and why
+- Smoke checklist from `make validate-hooks` checked off
+
+_Update this section with the team's specific PR process._

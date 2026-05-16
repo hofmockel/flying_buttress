@@ -1,0 +1,24 @@
+# Security rules — {{project_name}}
+
+## Hard rules
+- No secrets in code, commits, or logs — use environment variables or a secrets manager
+- No `eval()` on user-supplied input
+- No SQL string interpolation — always parameterized queries
+- No `innerHTML` with user-supplied content
+- All file paths from user input validated against an allowlist
+
+## Every PR checklist
+- [ ] Inputs validated and sanitized at the system boundary?
+- [ ] Error messages safe to show users? (No stack traces, internal paths.)
+- [ ] Does this touch auth/authz? If yes, flag for lead review before merge.
+- [ ] New dependencies pinned and justified in the PR description?
+
+## Dependency policy
+- New runtime dependencies need a one-sentence justification
+- Run `pip-audit` or `npm audit` before merging dependency changes
+
+## Incident rule
+If a secret is accidentally committed: rotate it immediately, then clean git history. Rotation first.
+
+---
+_Add project-specific security requirements here (compliance, data classification, pen-test findings)._

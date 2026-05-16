@@ -1,0 +1,58 @@
+# {{project_name}} Makefile
+# Scaffolded from flying_buttress on {{date}}.
+# Add your project-specific targets below the stubs.
+
+.PHONY: help spec test lint fmt validate-hooks
+
+help:
+	@echo "{{project_name}} targets:"
+	@echo ""
+	@echo "  make spec                     open spec workflow in Claude (or make spec SLUG=name)"
+	@echo "  make test                     run the test suite"
+	@echo "  make lint                     run the linter"
+	@echo "  make fmt                      run the formatter"
+	@echo "  make validate-hooks           run smoke checklist"
+
+# ── spec ─────────────────────────────────────────────────────────────────────
+
+spec:
+	@mkdir -p docs/specs
+ifdef SLUG
+	@if [ -f docs/specs/$(SLUG).md ]; then \
+		echo "Already exists: docs/specs/$(SLUG).md"; \
+	else \
+		cp .scaffold/spec.md.tmpl docs/specs/$(SLUG).md 2>/dev/null || \
+			echo "# Spec: $(SLUG)\n\n**Date:** $(shell date +%Y-%m-%d)\n**Status:** Draft\n" \
+			> docs/specs/$(SLUG).md; \
+		sed -i '' 's/{{slug}}/$(SLUG)/g; s/{{date}}/$(shell date +%Y-%m-%d)/g' \
+			docs/specs/$(SLUG).md 2>/dev/null || true; \
+		echo "Created: docs/specs/$(SLUG).md"; \
+	fi
+else
+	@echo "Tip: run /spec in Claude Code for the full guided workflow."
+	@echo "     Or: make spec SLUG=<feature-slug>"
+endif
+
+# ── quality gates — replace stubs with real commands ─────────────────────────
+
+test:
+	@echo "TODO: add your test command (e.g. pytest, npm test, go test ./...)"
+
+lint:
+	@echo "TODO: add your lint command (e.g. ruff check ., eslint src/)"
+
+fmt:
+	@echo "TODO: add your format command (e.g. ruff format ., prettier --write .)"
+
+# ── validate-hooks ────────────────────────────────────────────────────────────
+
+validate-hooks:
+	@echo "==> Smoke checklist"
+	@python3 -c \
+		"import json, sys; json.load(open('.claude/settings.json')); print('[✓] settings.json valid')" \
+		2>/dev/null || echo "[✗] settings.json missing or invalid"
+	@test -f CLAUDE.md     && echo "[✓] CLAUDE.md"        || echo "[✗] CLAUDE.md missing"
+	@test -f ONBOARDING.md && echo "[✓] ONBOARDING.md"    || echo "[✗] ONBOARDING.md missing"
+	@test -d .agents       && echo "[✓] .agents/"         || echo "[✗] .agents/ missing"
+	@echo ""
+	@echo "Manual: run 'claude' and confirm it loads correctly."

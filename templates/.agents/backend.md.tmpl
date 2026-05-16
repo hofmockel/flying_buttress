@@ -1,0 +1,25 @@
+# Backend rules — {{project_name}}
+
+## Boundaries
+- All external calls go through explicitly defined interfaces — no ad-hoc HTTP calls in business logic
+- Database access is always parameterized; no string interpolation in queries
+- Secrets are never hardcoded; read from environment variables only
+- API responses have typed contracts; no untyped dicts returned across boundaries
+
+## Naming
+- Python files: `snake_case.py`; TypeScript files: `kebab-case.ts`
+- Functions: verb_noun pattern (`get_user`, `create_session`)
+- Constants: `UPPER_SNAKE_CASE`
+
+## Error handling
+- Fail fast at system boundaries (user input, external APIs)
+- Never surface internal stack traces or file paths to API callers
+- Log with enough context to reproduce: request ID, user ID, operation, inputs (redacted if sensitive)
+
+## Structure
+- One responsibility per module
+- Business logic in plain functions, not buried in framework callbacks
+- Configuration is injected, not imported globally
+
+---
+_Extend these rules with project-specific conventions as the codebase grows._
