@@ -502,6 +502,23 @@ The coordination model is defined in [ADR-003](docs/adr/ADR-003-team-coordinatio
 - **Self-merge after 48 hours** if there is no blocking comment from the senior.
 - **Exception:** changes to `.claude/settings.json` or `.agents/security.md` require explicit senior approval before merge.
 
+### PR smoke checklist (Tier 1 — ADR-004)
+
+Every PR that touches a skill, hook, or `settings.json` must include this checklist in the PR description, checked off by the author before opening:
+
+```
+- [ ] Opened Claude Code from the repo root with no errors
+- [ ] CLAUDE.md loads and routes correctly (asked Claude "what is this repo?" and got a correct answer)
+- [ ] If a skill changed: ran the skill on a toy input and got the expected output shape
+- [ ] If settings.json changed: confirmed Claude Code started without permission errors
+- [ ] ONBOARDING.md is still accurate — no steps are broken by this change
+- [ ] make validate-hooks passes all automated checks
+```
+
+`make validate-hooks` covers the automated subset. The items above it require a live Claude Code session and must be run manually.
+
+**Enforcement:** the senior spot-checks at the weekly sync that the checklist was actually run. If it was skipped, the PR is not considered reviewed. Add items to this checklist whenever a regression is found; never remove items.
+
 ### Weekly sync
 
 Every Monday (or nearest working day), 30 minutes:
@@ -511,13 +528,15 @@ Every Monday (or nearest working day), 30 minutes:
 3. Review `docs/adr/README.md` together — advance any ADRs ready to move from Proposed → Accepted. *(10 min.)*
 4. Carry-back items: improvements observed in sibling projects this week. *(5 min.)*
 
-### Carry-back loop
+### Carry-back loop (Tier 3 evidence gate — ADR-004)
 
 When you discover an improvement in a sibling project (a better rule, a more useful Makefile target, a skill bug) that benefits the factory itself:
 
 1. Open a PR against flying_buttress — not the sibling project.
 2. PR description must include: what changed, why it's an improvement, and **evidence it works** (transcript excerpt, output artifact, or screenshot).
 3. "I tested it and it works" with no artifact is not acceptable.
+
+Acceptable evidence: a transcript excerpt showing the skill or hook producing the expected output; the output artifact itself (e.g., the PRD that `/spec` produced); or a screenshot of the factory running correctly in the new context. The senior enforces this at the weekly sync.
 
 ### Ownership
 
@@ -560,6 +579,17 @@ Don't put decisions in memory that the team needs to share. Those go in ADRs or 
 - Every PR gets a preview deploy — even a rough prototype. Stakeholder feedback on a rough version is cheaper than on a finished one.
 
 **What makes a prototype complete:** the feature works end-to-end in a development environment. Known rough edges are documented as issues, not TODO comments.
+
+### Integration milestone (Tier 2 — ADR-004)
+
+Before any v2 ("load-bearing soon") work begins, the factory must pass this milestone:
+
+1. Run `make scaffold TARGET=../fb_test_alpha` to stamp out a sibling test project.
+2. Run `/spec` inside `fb_test_alpha` on a real (non-toy) problem — a readable PRD must be produced.
+3. Run `/fix` on a planted bug inside `fb_test_alpha` — the bug must be reproduced, a failing test written, and the fix applied.
+4. Carry back at least one improvement from `fb_test_alpha` to flying_buttress following the carry-back rules in §9.
+
+If any step fails it is a blocker: open an issue, fix it, re-run from step 1. **Who runs it:** senior, with at least one junior observing. **When:** after all five v1 deliverables from ADR-001 are merged and stable. (`/scaffold` is a v2 deliverable — this milestone cannot run until it is built.)
 
 ### Productionize phase
 

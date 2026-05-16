@@ -1,6 +1,6 @@
 # ADR-004: Factory Test Strategy
 
-**Status:** Proposed  
+**Status:** Accepted  
 **Date:** 2026-05-15  
 **Deciders:** Senior dev  
 **Fixes:** G4 — No factory test strategy  

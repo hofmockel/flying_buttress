@@ -40,7 +40,7 @@ The scaffold-and-carry-back loop (§10.4) is a manual, single-developer discipli
 **Problem:** "Can we build something real with it?" (§10.4) is a reasonable smell test for a solo engineer. It's not a test strategy for a team. When factory behavior changes — a hook fires differently, a skill produces different artifacts — there's no regression check, no expected-output contract, no way to know if a carry-back broke something. Hook behavior is easy to break silently; this is the highest-risk gap.
 **Recommended action:** Define a minimal factory test harness. At minimum: a set of expected hook outcomes for known inputs, and a checklist that must pass before any carry-back lands in flying_buttress.
 **Owner:** TBD
-**Status:** Open
+**Status:** Closed — ADR-004 accepted 2026-05-16. Three-tier strategy in place: Tier 1 PR smoke checklist active now; Tier 2 integration milestone gates v2 start; Tier 3 carry-back evidence gate active from first carry-back.
 
 ---
 
