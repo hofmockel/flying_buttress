@@ -48,7 +48,7 @@ The scaffold-and-carry-back loop (§10.4) is a manual, single-developer discipli
 **Problem:** §1.2 claims "tool-agnostic for what you build, all-in on Claude Code for how you build it." The Makefile underlay mentioned in §5.1 as "the durable underlay" is never specified. If Claude Code changes pricing, retires a feature, or the team needs an alternative for any period, nothing survives. There's no abstraction layer between factory procedures and Claude Code-specific primitives.
 **Recommended action:** Specify the Makefile underlay concretely. Every factory workflow that can be expressed as a Make target should be. Claude Code skills call Make; Make is the durable substrate. Document this explicitly.
 **Owner:** TBD
-**Status:** Open
+**Status:** Closed — ADR-005 accepted 2026-05-16. Makefile exists with all six required targets. Skill-to-Make constraint documented in plan.md §5.1 and MANUAL.md §11. /spec skill already delegates to `make spec`.
 
 ---
 

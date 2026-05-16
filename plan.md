@@ -116,7 +116,9 @@ Long-context windows are not free. The factory enforces three habits:
 
 ### 5.1 Skills as the workflow primitive
 
-The factory's workflows live as **Claude Code skills** under `.claude/skills/<name>/SKILL.md`. Skills are user-invokable slash commands with structured prompts and well-named triggers. They are the agentic surface; the Makefile substrate referenced in `buttress.md` §6 is the durable underlay.
+The factory's workflows live as **Claude Code skills** under `.claude/skills/<name>/SKILL.md`. Skills are user-invokable slash commands with structured prompts and well-named triggers. They are the agentic surface; the `Makefile` at the repo root is the durable underlay (see [ADR-005](docs/adr/ADR-005-makefile-underlay.md) and `make help`).
+
+**The constraint (ADR-005):** if a skill invokes a shell operation for a project workflow, it must delegate to a Make target — not the raw command. Run `make <target>` from the skill. This way, if Claude Code is unavailable, a developer can reach the same operation through Make directly. Skills that do purely agentic work (Explore, Plan, AskUserQuestion) are exempt — they have no shell equivalent.
 
 Why skills, not Make targets, as the center of gravity here: skills carry their own context (when to trigger, what to do, what to expect), can compose subagents, and respect the permission and hook systems automatically. Make targets do not.
 

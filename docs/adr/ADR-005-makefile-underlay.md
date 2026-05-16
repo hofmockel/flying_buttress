@@ -1,6 +1,6 @@
 # ADR-005: Makefile Underlay
 
-**Status:** Proposed  
+**Status:** Accepted  
 **Date:** 2026-05-15  
 **Deciders:** Senior dev  
 **Fixes:** G5 — Vendor lock-in deeper than acknowledged; no durable substrate  

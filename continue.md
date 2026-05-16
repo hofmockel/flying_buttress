@@ -4,17 +4,15 @@
 
 **Repo:** `flying_buttress` — a software factory for AI-native development  
 **Branch:** `main` (clean, pushed, up to date)  
-**Last commit:** pending — ADR-004 accepted this session
+**Last commit:** pending — ADR-005 accepted this session
 
 ---
 
 ## What was done this session
 
-1. **Accepted ADR-004** (factory test strategy) — Three-tier test strategy fully documented:
-   - Tier 1 PR smoke checklist added to `ONBOARDING.md` Step 5 and `MANUAL.md` §9.
-   - Tier 2 integration milestone (scaffold → `/spec` → `/fix` → carry-back) added to `MANUAL.md` §10, gates v2 start.
-   - Tier 3 carry-back evidence gate labeled and expanded in `MANUAL.md` §11.
-   - ADR-004 marked Accepted; `docs/adr/README.md` updated; `backlog.md` G4 closed.
+1. **Accepted ADR-004** (factory test strategy) — Three-tier test strategy fully documented. PR smoke checklist in ONBOARDING.md and MANUAL.md. Tiers 2 and 3 in MANUAL.md §10–11. ADR-004 marked Accepted; G4 closed.
+
+2. **Accepted ADR-005** (Makefile underlay) — All six required targets already in place. `plan.md` §5.1 updated to point concretely at the Makefile and state the skill-to-Make constraint (ADR-005). ADR-005 marked Accepted; G5 closed.
 
 ---
 
@@ -26,19 +24,17 @@
 | ADR-002 | G3 — Day 1 onboarding | **Accepted** |
 | ADR-003 | G2 — Team coordination | **Accepted** |
 | ADR-004 | G4 — Factory test strategy | **Accepted** |
-| ADR-005 | G5 — Makefile underlay | Proposed ← **next** |
-| ADR-006 | G6 — Settings governance | Proposed |
+| ADR-005 | G5 — Makefile underlay | **Accepted** |
+| ADR-006 | G6 — Settings governance | Proposed ← **next** |
 | ADR-007 | C1/C2/C3 — Doc cleanup | Proposed |
 
 ---
 
-## Next step: ADR-005
+## Next step: ADR-006
 
-**File:** `docs/adr/ADR-005-makefile-underlay.md`
+**File:** `docs/adr/ADR-006-settings-governance.md`
 
-ADR-005 specifies the Makefile as the durable substrate beneath all Claude Code skills. Every factory workflow expressible as a Make target should be. Claude Code skills call Make; Make is the underlay that survives any tool change.
-
-Read ADR-005 in full before starting — it defines required targets and the constraint that skills must call `make <target>` rather than shelling out directly.
+ADR-006 defines who can merge changes to `.claude/settings.json`, what review is required, and how local overrides are handled. Read ADR-006 in full — it will specify a governance model and may require updating MANUAL.md §7 (permissions) and the ownership table in §9.
 
 ---
 
@@ -52,7 +48,8 @@ After every `git commit` (not `--amend`), `scripts/update_docs_on_commit.py` run
 
 | File | Why you'd open it |
 |---|---|
-| `docs/adr/ADR-005-makefile-underlay.md` | The spec for the next deliverable |
-| `Makefile` | Primary artifact for ADR-005 |
-| `docs/adr/README.md` | Update status when ADR-005 is accepted |
-| `backlog.md` | G5 is the gap ADR-005 closes |
+| `docs/adr/ADR-006-settings-governance.md` | The spec for the next deliverable |
+| `.claude/settings.json` | Primary artifact governed by ADR-006 |
+| `MANUAL.md` | §7 and §9 may need updating |
+| `docs/adr/README.md` | Update status when ADR-006 is accepted |
+| `backlog.md` | G6 is the gap ADR-006 closes |
