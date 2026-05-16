@@ -16,6 +16,14 @@ def get_commit_info():
 
 
 def main():
+    # Skip amends — prevents re-triggering after we fold CHANGELOG into the commit
+    try:
+        command = json.loads(sys.stdin.read()).get("tool_input", {}).get("command", "")
+        if "--amend" in command:
+            sys.exit(0)
+    except (json.JSONDecodeError, AttributeError):
+        pass
+
     try:
         hash_, msg, date = get_commit_info()
     except (subprocess.CalledProcessError, IndexError):

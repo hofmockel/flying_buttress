@@ -7,8 +7,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Accept ADR-002/003; update docs; add post-commit CHANGELOG hook (`694287e`) — 2026-05-15
-
 ## [0.1.0] - 2026-05-15
 
 ### Added
