@@ -23,7 +23,22 @@
 
 ---
 
-## What comes next: the Tier 2 integration milestone
+## Tier 2 integration milestone: PASSED (2026-05-17)
+
+All four steps complete. Evidence:
+
+| Step | Result |
+|---|---|
+| 1. Scaffold fb_test_alpha + validate-hooks | ✓ All checks green |
+| 2. /spec — text-stats PRD | ✓ `fb_test_alpha/docs/specs/text-stats.md` written |
+| 3. /fix — split(' ') word-count bug | ✓ Failing test → fix → 5/5 green → committed |
+| 4. Carry-back: CHANGELOG hook scoping + scaffold flags | ✓ Hook fix committed; CB1 filed in backlog.md |
+
+**ADR-004 Tier 2 is satisfied.** The factory is ready to support v2 feature development.
+
+---
+
+## What was next (now done): the Tier 2 integration milestone
 
 Before any v2 features start, the factory must pass this milestone (ADR-004 §Tier 2). It proves the factory works end-to-end on a real project, not just in theory.
 

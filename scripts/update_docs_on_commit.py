@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Run after every git commit. Inserts a CHANGELOG entry under [Unreleased]."""
 import json
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -16,11 +17,19 @@ def get_commit_info():
 
 
 def main():
+    factory_root = str(Path(__file__).parent.parent.resolve())
+
     # Skip amends — prevents re-triggering after we fold CHANGELOG into the commit
     try:
         command = json.loads(sys.stdin.read()).get("tool_input", {}).get("command", "")
         if "--amend" in command:
             sys.exit(0)
+        # Skip if the commit was in a sibling repo (cd to a different directory)
+        cd_match = re.search(r'(?:^|&&|;)\s*cd\s+(\S+)', command)
+        if cd_match:
+            cd_target = str(Path(cd_match.group(1)).resolve())
+            if cd_target != factory_root:
+                sys.exit(0)
     except (json.JSONDecodeError, AttributeError):
         pass
 

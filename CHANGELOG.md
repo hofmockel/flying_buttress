@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Tier 2 milestone complete: carry-back CHANGELOG hook scoping fix (`5b48c07`) — 2026-05-17
+
+- Add /fix skill: atomic TDD bug-fix loop for factory and templates (`6b03a18`) — 2026-05-17
+
+- Add /fix skill: atomic TDD bug-fix loop for factory and templates (`6b03a18`) — 2026-05-17
+
 - Add /fix skill: atomic TDD bug-fix loop for factory and templates (`d35eb8b`) — 2026-05-17
 
 - Wire active learning hooks into settings.json; activate make test (`ef813bb`) — 2026-05-17

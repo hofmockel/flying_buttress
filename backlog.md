@@ -102,6 +102,17 @@ Same candidates apply to `templates/.claude/settings.json.tmpl` (minus the facto
 
 ---
 
+---
+
+## Carry-back items (from Tier 2 milestone, 2026-05-17)
+
+### CB1 — scaffold.py missing --name/--slug flags
+**Problem:** `make scaffold TARGET=<path> --yes` still requires interactive prompts for project name and slug. Piping input works (`printf "name\nslug\n" | python3 ...`) but is not ergonomic or documented. Makes scripted re-scaffolding brittle.
+**Recommended action:** Add `--name` and `--slug` flags to `scaffold.py`. When both are present with `--yes`, skip all interactive prompts.
+**Status:** Open
+
+---
+
 ## Overall verdict
 
 The plan is a **strong solo-architect document** that needs to become a **team operating document**. The four-pillar structure is coherent. The v1/v2/speculative bucketing is mature. The policy-as-code and context-discipline sections are above average.
