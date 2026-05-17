@@ -652,7 +652,7 @@ Scope is committed via ADR-001. Legend: **✓ done** — shipped and verified; *
 | `/spec` — generate PRD, task list, tests, draft PR | ✓ done (v1) |
 | `/fix` — atomic TDD bug fix | ✓ done (Tier 2 milestone, 2026-05-17) |
 | `/scaffold` — stamp out a new sibling project from flying_buttress | → v2 |
-| `/review` — code review against `.agents/` rules | → v2 |
+| `/review` — code review against `.agents/` rules | ✓ done (2026-05-17) |
 | `/refactor` — map dependencies, propose design, migrate incrementally | ○ speculative |
 | `/bootstrap` — fork-time wizard that fills in role choices from `buttress.md` §3 | ○ speculative |
 | `/adr` — author or amend an Architecture Decision Record | ○ speculative |
