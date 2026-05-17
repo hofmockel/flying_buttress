@@ -78,13 +78,17 @@ All four steps complete with no open blockers. If any step fails, open an issue 
 
 ---
 
-## The blocker: /fix does not exist
+## /fix is built (2026-05-17)
 
-`/fix` is not built yet. Two options:
+The blocker is resolved. `/fix` is a fully implemented skill:
 
-**Option A — Build /fix first (recommended).** `/fix` is a v2 item but the milestone depends on it. Build it as a first v2 deliverable before running the milestone. The skill should: reproduce the bug, write a failing test, apply the minimal fix, run `make test`, and commit. Follow the same pattern as `/spec` — Make target first, skill calls it.
+| Artifact | Location |
+|---|---|
+| Factory skill | `.claude/skills/fix/SKILL.md` |
+| Template (stamped to new projects) | `templates/.claude/skills/fix/SKILL.md` |
+| Makefile target | `make fix` |
 
-**Option B — Run the milestone without /fix.** Fix the planted bug manually in a Claude Code session. Document the fix steps and note them as the specification for `/fix`. This gives real data for the skill design before writing it.
+**Workflow:** signal active_skill → identify bug (arg or backlog) → Explore → write failing test → confirm red → minimal fix → confirm green → one atomic commit → update backlog.
 
 ---
 

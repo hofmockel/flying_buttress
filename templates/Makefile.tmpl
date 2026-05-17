@@ -2,12 +2,13 @@
 # Scaffolded from flying_buttress on {{date}}.
 # Add your project-specific targets below the stubs.
 
-.PHONY: help spec test lint fmt validate-hooks
+.PHONY: help spec fix test lint fmt validate-hooks
 
 help:
 	@echo "{{project_name}} targets:"
 	@echo ""
 	@echo "  make spec                     open spec workflow in Claude (or make spec SLUG=name)"
+	@echo "  make fix                      run /fix guidance (or run /fix in Claude)"
 	@echo "  make test                     run the test suite"
 	@echo "  make lint                     run the linter"
 	@echo "  make fmt                      run the formatter"
@@ -32,6 +33,12 @@ else
 	@echo "Tip: run /spec in Claude Code for the full guided workflow."
 	@echo "     Or: make spec SLUG=<feature-slug>"
 endif
+
+# ── fix ──────────────────────────────────────────────────────────────────────
+
+fix:
+	@echo "Run /fix in Claude Code for the guided TDD fix workflow."
+	@echo "Tip: /fix <bug description>  — or omit to pull from backlog.md"
 
 # ── quality gates — replace stubs with real commands ─────────────────────────
 

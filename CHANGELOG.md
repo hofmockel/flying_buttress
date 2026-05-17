@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Add /fix skill: atomic TDD bug-fix loop for factory and templates (`d35eb8b`) — 2026-05-17
+
 - Wire active learning hooks into settings.json; activate make test (`ef813bb`) — 2026-05-17
 
 - Add active learning system: hook-driven tool promotion, spec deferral, and tool registry (`05c1c2b`) — 2026-05-16

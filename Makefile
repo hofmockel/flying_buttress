@@ -4,13 +4,14 @@
 #
 # Owner: senior dev. Changes here require the same review as settings.json (ADR-006).
 
-.PHONY: help spec test lint fmt validate-hooks scaffold promote-queue tool-registry scaffold-tool
+.PHONY: help spec fix test lint fmt validate-hooks scaffold promote-queue tool-registry scaffold-tool
 
 help:
 	@echo "flying_buttress factory targets:"
 	@echo ""
 	@echo "  make spec                     open spec template (or run /spec in Claude)"
 	@echo "  make spec SLUG=my-feature     create docs/specs/my-feature.md from template"
+	@echo "  make fix                      run /fix guidance (or run /fix in Claude)"
 	@echo "  make test                     run the test suite"
 	@echo "  make lint                     run the linter"
 	@echo "  make fmt                      run the formatter"
@@ -35,6 +36,12 @@ else
 	@echo "Tip: run /spec in Claude Code for the full guided workflow."
 	@echo "     Or: make spec SLUG=<feature-slug> to create a blank spec."
 endif
+
+# ── fix ──────────────────────────────────────────────────────────────────────
+
+fix:
+	@echo "Run /fix in Claude Code for the guided TDD fix workflow."
+	@echo "Tip: /fix <bug description>  — or omit to pull from backlog.md"
 
 # ── quality gates (stubs — fill in as tooling is added) ──────────────────────
 
