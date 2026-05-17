@@ -30,9 +30,9 @@ If a workflow can be expressed in a Claude Code skill, it should be. If a safety
 
 Three audiences, all inward-facing:
 
-- **Solo builder running the factory** — read in order; §4–§7 are load-bearing; §14 is the working menu.
-- **Collaborator inheriting it** — start with §3 (pillars overview) and §9 (lifecycle table), then §14 (the menu of what's been scaffolded).
-- **Template-cloner forking it** — start with §1–§3, then jump to §14 to understand what comes with the box.
+- **Solo builder running the factory** — read in order; §4–§7 are load-bearing; §14 tracks delivery status (done / v2 / speculative).
+- **Collaborator inheriting it** — start with §3 (pillars overview) and §9 (lifecycle table), then §14 (what's shipped, what's queued).
+- **Template-cloner forking it** — start with §1–§3, then jump to §14 to understand what comes with the box and what's still queued.
 
 ---
 
@@ -613,61 +613,77 @@ Three buckets. Every Claude Code feature lands in exactly one.
 
 ---
 
-## 14. Scaffolding possibilities (the menu)
+## 14. Delivery status
 
-A possibility survey — not a commitment plan. Each entry is something that *could* be scaffolded with the features above. Sequencing is deferred.
+Scope is committed via ADR-001. Legend: **✓ done** — shipped and verified; **→ v2** — queued, not yet started; **○ speculative** — no committed date.
 
-### 14.1 Skills we could author
+### 14.1 Skills
 
-- `/spec` — generate PRD, task list, tests, draft PR for a new feature
-- `/fix` — atomic TDD bug fix
-- `/refactor` — map dependencies, propose design, migrate incrementally
-- `/scaffold` — stamp out a new sibling project from flying_buttress; accepts a target path outside the repo, copies the CLAUDE.md hierarchy, `.agents/` rules, skills, hooks, and `settings.json` patterns into it, initializes a git repo there, and optionally installs `less_tokens` by cloning it into the new project; never writes back to flying_buttress
-- `/bootstrap` — fork-time wizard that fills in role choices from `buttress.md` §3
-- `/adr` — author or amend an Architecture Decision Record
-- `/runbook` — generate a runbook stub for a new feature
-- `/promote` — graduate a prototype from `/apps/prototype/` to a real surface
-- `/audit` — run all governance checks and produce a status report
+| Skill | Status |
+|---|---|
+| `/spec` — generate PRD, task list, tests, draft PR | ✓ done (v1) |
+| `/fix` — atomic TDD bug fix | ✓ done (Tier 2 milestone, 2026-05-17) |
+| `/scaffold` — stamp out a new sibling project from flying_buttress | → v2 |
+| `/review` — code review against `.agents/` rules | → v2 |
+| `/refactor` — map dependencies, propose design, migrate incrementally | ○ speculative |
+| `/bootstrap` — fork-time wizard that fills in role choices from `buttress.md` §3 | ○ speculative |
+| `/adr` — author or amend an Architecture Decision Record | ○ speculative |
+| `/runbook` — generate a runbook stub for a new feature | ○ speculative |
+| `/promote` — graduate a prototype from `/apps/prototype/` to a real surface | ○ speculative |
+| `/audit` — run all governance checks and produce a status report | ○ speculative |
 
-### 14.2 Hooks we could write
+### 14.2 Hooks
 
-- **PreToolUse(Bash)** — block destructive patterns (`rm -rf /`, force-push to main, hard reset)
-- **PreToolUse(Bash)** — block secret leakage in command lines
-- **PreToolUse(Read)** — block reads of `.env*` and other sensitive paths
-- **PostToolUse(Write|Edit)** — auto-format changed files
-- **PostToolUse(Write|Edit)** — trigger type-check on changed packages
-- **PostToolUse(Write|Edit)** — trigger affected tests
-- **UserPromptSubmit** — route detected intent ("fix X", "spec Y") to matching skills
-- **Stop** — prompt for changelog entry when ending a feature-branch session
-- **PreCompact** — archive transcript to `docs/transcripts/` before compression
+| Hook | Status |
+|---|---|
+| **PostToolUse(Bash)** bash-logger — record tool use patterns for active learning | ✓ done (2026-05-17) |
+| **PostToolUse(Write)** tool-registry — track writes to `tools/` for skill promotion | ✓ done (2026-05-17) |
+| **Stop** pattern-analyzer — surface repeated patterns as tool promotion candidates | ✓ done (2026-05-17) |
+| **Stop** update_docs_on_commit — auto-insert CHANGELOG bullet on each commit | ✓ done |
+| **PreToolUse(Bash)** — block destructive patterns (`rm -rf /`, force-push to main, hard reset) | → v2 |
+| **PostToolUse(Write\|Edit)** — auto-format changed files | → v2 |
+| **PostToolUse(Write\|Edit)** — trigger type-check on changed packages | → v2 |
+| **PostToolUse(Write\|Edit)** — trigger affected tests on save | → v2 |
+| **PreToolUse(Bash)** — MCP compliance guardrail (C1 candidate, ADR-007) | → v2 |
+| **UserPromptSubmit** — route detected intent ("fix X", "spec Y") to matching skills | ○ speculative |
+| **PreCompact** — archive transcript to `docs/transcripts/` before compression | ○ speculative |
 
-### 14.3 `settings.json` possibilities
+### 14.3 `settings.json`
 
-- `permissions.allow` — common read-only ops, project-scoped writes
-- `permissions.deny` — operations on `.git/` internals, secrets paths, generated or vendored directories
-- `hooks` — entries from §14.2
-- `env` — model preference, fast-mode default, project flags
+| Item | Status |
+|---|---|
+| `permissions.allow` — common read-only ops, project-scoped writes | ✓ done (v1) |
+| `permissions.deny` — destructive bash, secrets paths, `.git/` internals | ✓ done (2026-05-16) |
+| `hooks` — active learning hooks wired | ✓ done (2026-05-17) |
+| `hooks` — format / type-check / test on save | → v2 |
+| `env` — model preference, fast-mode default, project flags | ○ speculative |
 
-### 14.4 CLAUDE.md sections we could define
+### 14.4 CLAUDE.md sections
 
-- **Project overview** — one paragraph; routes to `buttress.md`
-- **Operating manual** — routes to `plan.md` (this doc)
-- **Rules** — routes to `.agents/*.md`
-- **Workflows** — routes to skills under `.claude/skills/`
-- **Memory** — routes to `~/.claude/projects/flying_buttress/memory/MEMORY.md`
-- **Gotchas** — load-bearing exceptions specific to this repo (e.g., paths that must not be edited by hand)
+| Section | Status |
+|---|---|
+| Project overview — one paragraph; routes to `buttress.md` | ✓ done (v1) |
+| Operating manual — routes to `plan.md` | ✓ done (v1) |
+| Rules — routes to `.agents/*.md` | ✓ done (v1) |
+| Workflows — routes to skills under `.claude/skills/` | ✓ done (v1) |
+| Memory — routes to `~/.claude/projects/flying_buttress/memory/MEMORY.md` | ○ speculative |
+| Gotchas — load-bearing exceptions specific to this repo | ○ speculative |
 
-### 14.5 Custom subagents we could define
+### 14.5 Custom subagents
 
-- **security-reviewer-deep** — slow, thorough; runs in a worktree against a PR diff
-- **schema-checker** — runs Pydantic/Zod validators on changed schemas
-- **doc-keeper** — checks runbooks and changelogs were updated alongside features
-- **transcript-archivist** — periodically archives and indexes session transcripts
+| Subagent | Status |
+|---|---|
+| **security-reviewer-deep** — slow, thorough; runs in a worktree against a PR diff | ○ speculative |
+| **schema-checker** — runs Pydantic/Zod validators on changed schemas | ○ speculative |
+| **doc-keeper** — checks runbooks and changelogs were updated alongside features | ○ speculative |
+| **transcript-archivist** — periodically archives and indexes session transcripts | ○ speculative |
 
-### 14.6 MCP connectors we could install
+### 14.6 MCP connectors
 
-- **Load-bearing first wave** — `claude-in-chrome`, `claude-preview`, `ccd_directory`, `scheduled-tasks`, `ccd_session_mgmt`, `mcp-registry`
-- **Speculative additions** — custom MCP servers wrapping project-specific systems (deferred)
+| Connector | Status |
+|---|---|
+| `claude-in-chrome`, `claude-preview`, `ccd_directory`, `scheduled-tasks`, `ccd_session_mgmt`, `mcp-registry` | ✓ installed |
+| Custom MCP servers wrapping project-specific systems | ○ speculative (deferred per §8.3) |
 
 Review-specific skills, hooks, subagents, and GitHub Actions are enumerated separately in `review_plan.md` §9.
 

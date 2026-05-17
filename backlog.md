@@ -10,7 +10,7 @@
 **Problem:** The document explicitly defers sequencing to "scaffolding time." A small group can't parallelize twelve open choices; they'll converge on different parts of the menu and produce an inconsistent factory.
 **Recommended action:** Define a concrete v1 MVP cut of ~5 items. Candidate set: CLAUDE.md hierarchy, one PreToolUse hook (block destructive bash), one PostToolUse hook (run tests on save), `/spec` and `/fix` skills, baseline `settings.json`. Ship that and stop.
 **Owner:** TBD
-**Status:** Open
+**Status:** Closed — ADR-001 committed v1 scope (8 deliverables, all shipped). `plan.md` §14 rewritten as a delivery-status table (✓ done / → v2 / ○ speculative). 2026-05-17.
 
 ---
 
