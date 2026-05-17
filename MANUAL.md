@@ -88,11 +88,19 @@ The scaffolder will prompt you for:
 | **Project slug** | Kebab-case identifier; auto-derived from name | `acme-api` |
 | **Install less_tokens?** | Clones less_tokens into the new project | `y` / `N` |
 
-To skip prompts (for scripted use):
+To skip all prompts for scripted use, supply `--name`, `--slug`, and `--yes`:
 
 ```bash
-python3 scripts/scaffold.py --target ../my-project --yes
+python3 scripts/scaffold.py --target ../my-project --name "Acme API" --slug acme-api --yes
 ```
+
+Or via Make:
+
+```bash
+make scaffold TARGET=../my-project NAME="Acme API" SLUG=acme-api YES=1
+```
+
+When `--name` is given without `--slug`, the slug is auto-derived from the name and no prompt is shown. When `--yes` is omitted, missing values are still prompted interactively.
 
 ### What gets created
 
@@ -297,12 +305,13 @@ make validate-hooks
 
 Run this before opening any PR. Add it to your CI pipeline once GitHub Actions is configured.
 
-#### `make scaffold TARGET=<path>`
+#### `make scaffold TARGET=<path> [NAME=...] [SLUG=...] [YES=1]`
 
-Calls `scripts/scaffold.py` to stamp out a new sibling project. `TARGET` is required.
+Calls `scripts/scaffold.py` to stamp out a new sibling project. `TARGET` is required. Pass `NAME`, `SLUG`, and `YES=1` to skip all interactive prompts.
 
 ```bash
 make scaffold TARGET=../new-project
+make scaffold TARGET=../new-project NAME="Acme API" SLUG=acme-api YES=1
 ```
 
 ### Adding targets to your project's Makefile

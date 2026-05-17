@@ -109,7 +109,7 @@ Same candidates apply to `templates/.claude/settings.json.tmpl` (minus the facto
 ### CB1 — scaffold.py missing --name/--slug flags
 **Problem:** `make scaffold TARGET=<path> --yes` still requires interactive prompts for project name and slug. Piping input works (`printf "name\nslug\n" | python3 ...`) but is not ergonomic or documented. Makes scripted re-scaffolding brittle.
 **Recommended action:** Add `--name` and `--slug` flags to `scaffold.py`. When both are present with `--yes`, skip all interactive prompts.
-**Status:** Open
+**Status:** Closed — `--name`, `--slug` flags added to `scaffold.py` and wired through `make scaffold` (NAME/SLUG/YES=1). 11 tests added in `tests/unit/test_scaffold.py`. 2026-05-17.
 
 ---
 

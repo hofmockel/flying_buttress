@@ -80,11 +80,17 @@ def init_git(path: Path) -> bool:
     return result.returncode == 0
 
 
-def main():
+def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Scaffold a new flying_buttress project.")
     parser.add_argument("--target", required=True, help="Path to the new project directory")
+    parser.add_argument("--name", default=None, help="Project display name (skips interactive prompt)")
+    parser.add_argument("--slug", default=None, help="Project slug, kebab-case (skips interactive prompt)")
     parser.add_argument("--yes", action="store_true", help="Skip confirmation prompts")
-    args = parser.parse_args()
+    return parser
+
+
+def main(argv=None):
+    args = _build_parser().parse_args(argv)
 
     target = Path(args.target).expanduser().resolve()
 
@@ -99,8 +105,17 @@ def main():
                 print("Aborted.")
                 sys.exit(0)
 
-    project_name = prompt("Project name", default=target.name)
-    project_slug = prompt("Project slug (kebab-case)", default=to_slug(project_name))
+    if args.name is not None:
+        project_name = args.name
+    else:
+        project_name = prompt("Project name", default=target.name)
+
+    if args.slug is not None:
+        project_slug = args.slug
+    elif args.yes:
+        project_slug = to_slug(project_name)
+    else:
+        project_slug = prompt("Project slug (kebab-case)", default=to_slug(project_name))
 
     install_less_tokens = False
     if not args.yes:

@@ -97,7 +97,10 @@ scaffold:
 ifndef TARGET
 	$(error TARGET is required. Usage: make scaffold TARGET=../my-project)
 endif
-	@python3 scripts/scaffold.py --target "$(TARGET)"
+	@python3 scripts/scaffold.py --target "$(TARGET)" \
+		$(if $(NAME),--name "$(NAME)") \
+		$(if $(SLUG),--slug "$(SLUG)") \
+		$(if $(YES),--yes)
 
 # ── active learning system ────────────────────────────────────────────────────
 
