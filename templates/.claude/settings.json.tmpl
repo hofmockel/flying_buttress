@@ -14,5 +14,26 @@
       "Bash(git clean -f*)",
       "Read(.env*)"
     ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 .claude/hooks/on_write_fmt.py"
+          },
+          {
+            "type": "command",
+            "command": "python3 .claude/hooks/on_write_lint.py"
+          },
+          {
+            "type": "command",
+            "command": "python3 .claude/hooks/on_write_test.py"
+          }
+        ]
+      }
+    ]
   }
 }

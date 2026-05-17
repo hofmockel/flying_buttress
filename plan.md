@@ -669,9 +669,9 @@ Scope is committed via ADR-001. Legend: **✓ done** — shipped and verified; *
 | **Stop** pattern-analyzer — surface repeated patterns as tool promotion candidates | ✓ done (2026-05-17) |
 | **Stop** update_docs_on_commit — auto-insert CHANGELOG bullet on each commit | ✓ done |
 | **PreToolUse(Bash)** — block destructive patterns (`rm -rf /`, force-push to main, hard reset) | → v2 |
-| **PostToolUse(Write\|Edit)** — auto-format changed files | → v2 |
-| **PostToolUse(Write\|Edit)** — trigger type-check on changed packages | → v2 |
-| **PostToolUse(Write\|Edit)** — trigger affected tests on save | → v2 |
+| **PostToolUse(Write\|Edit)** `on_write_fmt` — auto-format changed source files | ✓ done (2026-05-17) |
+| **PostToolUse(Write\|Edit)** `on_write_lint` — lint changed source files | ✓ done (2026-05-17) |
+| **PostToolUse(Write\|Edit)** `on_write_test` — run tests when a test file changes | ✓ done (2026-05-17) |
 | **PreToolUse(Bash)** — MCP compliance guardrail (C1 candidate, ADR-007) | → v2 |
 | **UserPromptSubmit** — route detected intent ("fix X", "spec Y") to matching skills | ○ speculative |
 | **PreCompact** — archive transcript to `docs/transcripts/` before compression | ○ speculative |

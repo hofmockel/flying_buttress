@@ -56,10 +56,10 @@ test:
 	python3 -m pytest tests/ -v
 
 lint:
-	@echo "No linter configured yet. Add your lint command here."
+	ruff check .
 
 fmt:
-	@echo "No formatter configured yet. Add your format command here."
+	ruff format .
 
 # ── validate-hooks (ADR-004 tier-1 smoke checklist) ──────────────────────────
 

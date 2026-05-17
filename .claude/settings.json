@@ -39,6 +39,18 @@
           {
             "type": "command",
             "command": ".venv/bin/python .claude/hooks/tool-registry.py"
+          },
+          {
+            "type": "command",
+            "command": "python3 .claude/hooks/on_write_fmt.py"
+          },
+          {
+            "type": "command",
+            "command": "python3 .claude/hooks/on_write_lint.py"
+          },
+          {
+            "type": "command",
+            "command": "python3 .claude/hooks/on_write_test.py"
           }
         ]
       },
