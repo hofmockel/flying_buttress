@@ -35,6 +35,29 @@
           {
             "type": "command",
             "command": ".venv/bin/python .claude/hooks/index-refresh.py"
+          },
+          {
+            "type": "command",
+            "command": ".venv/bin/python .claude/hooks/tool-registry.py"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".venv/bin/python .claude/hooks/bash-logger.py"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".venv/bin/python .claude/hooks/pattern-analyzer.py"
           }
         ]
       }

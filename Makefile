@@ -39,7 +39,7 @@ endif
 # ── quality gates (stubs — fill in as tooling is added) ──────────────────────
 
 test:
-	@echo "No test suite configured yet. Add your test command here."
+	python3 -m pytest tests/ -v
 
 lint:
 	@echo "No linter configured yet. Add your lint command here."

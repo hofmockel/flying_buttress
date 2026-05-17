@@ -88,6 +88,20 @@ All four steps complete with no open blockers. If any step fails, open an issue 
 
 ---
 
+## Active learning hooks: wired (2026-05-17)
+
+Three hooks are now registered in `.claude/settings.json`:
+
+| Hook | Event | File |
+|---|---|---|
+| bash-logger | PostToolUse/Bash | `.claude/hooks/bash-logger.py` |
+| tool-registry | PostToolUse/Write | `.claude/hooks/tool-registry.py` |
+| pattern-analyzer | Stop | `.claude/hooks/pattern-analyzer.py` |
+
+`make test` is now live (28 tests, all passing). `make validate-hooks` is fully green.
+
+---
+
 ## v2 candidate deliverables (not yet scoped)
 
 From `plan.md` §13 "load-bearing soon" list — not committed, just the queue to draw from:

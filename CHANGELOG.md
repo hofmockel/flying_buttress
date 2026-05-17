@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Wire active learning hooks into settings.json; activate make test (`ef813bb`) — 2026-05-17
+
 - Add active learning system: hook-driven tool promotion, spec deferral, and tool registry (`05c1c2b`) — 2026-05-16
 
 - continue.md: expand Tier 2 milestone with step-by-step instructions and /fix options (`e519798`) — 2026-05-16
