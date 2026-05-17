@@ -24,7 +24,7 @@
 The scaffold-and-carry-back loop (§10.4) is a manual, single-developer discipline. Under a group it will produce divergence within weeks.
 **Recommended action:** Add a "team coordination" section to `plan.md` covering: factory ownership, PR process for factory changes, memory sync strategy, and carry-back arbitration.
 **Owner:** TBD
-**Status:** Open
+**Status:** Closed — ADR-003 defines the full model (PR process, carry-back rules, ownership map, memory policy). `plan.md` §10.4 updated to reference carry-back rules; §10.7 added as team coordination summary pointing to ADR-003. 2026-05-17.
 
 ---
 
@@ -32,7 +32,7 @@ The scaffold-and-carry-back loop (§10.4) is a manual, single-developer discipli
 **Problem:** A new developer joining has no answer to "what do I do first, second, third?" §1.3 gives reading order, not a setup path. `/scaffold` is aspirational and unimplemented; `less_tokens` requires manual installation. A new team member will spend hours guessing.
 **Recommended action:** Add a concrete "Day 1" section with 5 ordered steps. Steps can reference skills not yet built, but the sequence must be stated.
 **Owner:** TBD
-**Status:** Open
+**Status:** Closed — ADR-002 accepted; `ONBOARDING.md` written with 5 ordered steps (read factory → read queue → pick task → set up env → open PR). `plan.md` §1.3 updated to send new developers to `ONBOARDING.md` first. 2026-05-17.
 
 ---
 

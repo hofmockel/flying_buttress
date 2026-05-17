@@ -28,7 +28,9 @@ If a workflow can be expressed in a Claude Code skill, it should be. If a safety
 
 ### 1.3 Audience and reading order
 
-Three audiences, all inward-facing:
+**New to this repo?** Start with [ONBOARDING.md](ONBOARDING.md) — five ordered steps from "I just cloned this" to "I have a PR open." Come back to this document after Step 1.
+
+Three audiences for this document specifically:
 
 - **Solo builder running the factory** — read in order; §4–§7 are load-bearing; §14 tracks delivery status (done / v2 / speculative).
 - **Collaborator inheriting it** — start with §3 (pillars overview) and §9 (lifecycle table), then §14 (what's shipped, what's queued).
@@ -475,7 +477,7 @@ The development loop for improving the factory:
 1. **Scaffold** — run `/scaffold` to stamp out a sibling test project from the current factory state
 2. **Build** — work in the test project, using and stressing the factory's skills, hooks, and templates
 3. **Observe** — note what's missing, wrong, or improvable in the factory
-4. **Carry back** — switch to flying_buttress, apply the improvements, commit
+4. **Carry back** — open a PR against flying_buttress with the improvement and evidence it works (see §10.7 for rules)
 5. **Repeat** — the next test project inherits the improved factory
 
 This loop *is* the factory's test suite. There is no automated end-to-end test; the test is "can we build something real with it?"
@@ -503,6 +505,32 @@ The `.gitignore` stays minimal:
 less_tokens/
 sandbox/
 ```
+
+### 10.7 Team coordination (ADR-003)
+
+Full rules in [ADR-003](docs/adr/ADR-003-team-coordination.md). Summary:
+
+**PR and merge process**
+- Juniors open PRs for every factory change; no direct commits to `main`.
+- PRs self-merge after 48 hours if there is no blocking comment from the senior.
+- Changes to `.claude/settings.json` or `.agents/*.md` require explicit senior approval before merge (not subject to the 48h rule; see ADR-006).
+- Senior reviews all merged PRs at the weekly sync (Mondays).
+
+**Carry-back rules**
+- The person who observed the improvement opens the PR against flying_buttress, not the test project.
+- PR description must include: what changed, why it's an improvement, and evidence it works (transcript excerpt, output artifact, or screenshot).
+- Conflicts with another junior's in-progress work are flagged at the weekly sync, not resolved unilaterally.
+
+**Ownership**
+
+| Artifact | Approval to merge |
+|---|---|
+| `ONBOARDING.md`, `CLAUDE.md` (root), skills, `backlog.md` | 48h self-merge |
+| `.agents/*.md`, `.claude/settings.json` | Senior approval |
+| `docs/adr/` | Senior approval to advance status to Accepted |
+
+**Memory**
+Memory files (`~/.claude/projects/.../memory/`) are per-machine and not committed. Decisions the team needs to share go in ADRs or `backlog.md`, not memory.
 
 ---
 

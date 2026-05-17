@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- G2/G3: add team coordination and onboarding pointers to plan.md (`6ae2101`) — 2026-05-17
+
 - G1: rewrite plan.md §14 as delivery-status table (`5377572`) — 2026-05-17
 
 - CB1: add --name/--slug flags to scaffold.py (`8ce743c`) — 2026-05-17
