@@ -4,7 +4,7 @@
 #
 # Owner: senior dev. Changes here require the same review as settings.json (ADR-006).
 
-.PHONY: help spec test lint fmt validate-hooks scaffold
+.PHONY: help spec test lint fmt validate-hooks scaffold promote-queue tool-registry scaffold-tool
 
 help:
 	@echo "flying_buttress factory targets:"
@@ -65,6 +65,19 @@ validate-hooks:
 	@test -d .claude/skills/spec  && echo "[✓] /spec skill exists"     || echo "[✗] .claude/skills/spec/ missing"
 	@test -d templates            && echo "[✓] templates/ exists"      || echo "[✗] templates/ missing"
 	@test -f scripts/scaffold.py  && echo "[✓] scripts/scaffold.py"    || echo "[✗] scripts/scaffold.py missing"
+	@python3 -c \
+		"import json; json.load(open('.claude/tool_registry.json')); print('[✓] tool_registry.json valid JSON')" \
+		2>/dev/null || echo "[✗] tool_registry.json missing or invalid"
+	@test -f .claude/hooks/bash-logger.py     && echo "[✓] bash-logger hook exists"     || echo "[ ] bash-logger.py not installed (run make install-hooks)"
+	@test -f .claude/hooks/pattern-analyzer.py && echo "[✓] pattern-analyzer hook exists" || echo "[ ] pattern-analyzer.py not installed (run make install-hooks)"
+	@test -f .claude/hooks/tool-registry.py   && echo "[✓] tool-registry hook exists"   || echo "[ ] tool-registry.py not installed (run make install-hooks)"
+	@python3 -c "\
+import json, pathlib; \
+log = pathlib.Path('.claude/state/bash-log.jsonl'); \
+lines = [l for l in log.read_text().splitlines() if l.strip()] if log.exists() else []; \
+[json.loads(l) for l in lines]; \
+print(f'[✓] bash-log.jsonl valid ({len(lines)} entries)') \
+" 2>/dev/null || echo "[ ] bash-log.jsonl not yet created (ok on fresh install)"
 	@echo ""
 	@echo "Manual checks (run these yourself):"
 	@echo "  [ ] claude starts from repo root with no errors"
@@ -78,3 +91,47 @@ ifndef TARGET
 	$(error TARGET is required. Usage: make scaffold TARGET=../my-project)
 endif
 	@python3 scripts/scaffold.py --target "$(TARGET)"
+
+# ── active learning system ────────────────────────────────────────────────────
+
+promote-queue:
+	@if [ -f .claude/promote_queue.md ]; then \
+		echo "==> Pending tool promotions:"; \
+		grep -c '"status": "pending"' .claude/promote_queue.md 2>/dev/null \
+			| xargs -I{} echo "  {} pending"; \
+		grep -c '"status": "needs-confirmation"' .claude/promote_queue.md 2>/dev/null \
+			| xargs -I{} echo "  {} needs confirmation"; \
+		echo ""; \
+		cat .claude/promote_queue.md; \
+	else \
+		echo "No promote queue yet (.claude/promote_queue.md not found)."; \
+	fi
+
+tool-registry:
+	@if [ -f .claude/tool_registry.json ]; then \
+		python3 -c "\
+import json; \
+entries = json.load(open('.claude/tool_registry.json')); \
+print(f'{len(entries)} registered tool(s)'); \
+[print(f'  {e[\"skill\"]}/{e[\"name\"]}  —  {e[\"description\"]}') for e in entries] \
+"; \
+	else \
+		echo "No tool registry found (.claude/tool_registry.json not found)."; \
+	fi
+
+scaffold-tool:
+ifndef SKILL
+	$(error SKILL is required. Usage: make scaffold-tool SKILL=<skill-name> NAME=<tool-name>)
+endif
+ifndef NAME
+	$(error NAME is required. Usage: make scaffold-tool SKILL=<skill-name> NAME=<tool-name>)
+endif
+	@mkdir -p .claude/skills/$(SKILL)/tools
+	@TARGET=.claude/skills/$(SKILL)/tools/$(NAME).py; \
+	if [ -f $$TARGET ]; then \
+		echo "Already exists: $$TARGET"; \
+	else \
+		printf '#!/usr/bin/env python3\n"""Tool: $(NAME)\n\nSkill: $(SKILL)\nDate: $(shell date +%%Y-%%m-%%d)\n"""\nfrom __future__ import annotations\n\n\ndef $(NAME)() -> None:\n    """TODO: implement."""\n    raise NotImplementedError\n' > $$TARGET; \
+		echo "Created: $$TARGET"; \
+	fi
+

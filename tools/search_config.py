@@ -49,6 +49,9 @@ TOOL_OUTPUT_TAIL_LINES: int = 20    # Bash: lines kept from output end (errors l
 # --- Strategy 5: Conversation Compaction Trigger ---
 MAX_SESSION_CHARS: int = 500_000    # ~125k tokens; set 0 to disable
 
+# --- Active learning: tool promotion threshold ---
+BASH_PROMOTE_THRESHOLD: int = 5     # times a command skeleton must repeat before promotion is suggested
+
 STATE_DIR: Path = BASE / ".claude" / "state"
 
 # --- Token savings tracking (Strategy metrics) ---
