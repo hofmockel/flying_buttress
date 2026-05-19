@@ -672,7 +672,7 @@ Scope is committed via ADR-001. Legend: **✓ done** — shipped and verified; *
 | **PostToolUse(Write\|Edit)** `on_write_fmt` — auto-format changed source files | ✓ done (2026-05-17) |
 | **PostToolUse(Write\|Edit)** `on_write_lint` — lint changed source files | ✓ done (2026-05-17) |
 | **PostToolUse(Write\|Edit)** `on_write_test` — run tests when a test file changes | ✓ done (2026-05-17) |
-| **PreToolUse(Bash)** — MCP compliance guardrail (C1 candidate, ADR-007) | → v2 |
+| **PreToolUse(Bash)** — MCP compliance guardrail (C1 candidate, ADR-007) | ✓ done (2026-05-19) |
 | **UserPromptSubmit** — route detected intent ("fix X", "spec Y") to matching skills | ○ speculative |
 | **PreCompact** — archive transcript to `docs/transcripts/` before compression | ○ speculative |
 

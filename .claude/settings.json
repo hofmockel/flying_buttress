@@ -83,6 +83,15 @@
             "command": ".venv/bin/python .claude/hooks/search-first.py"
           }
         ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 .claude/hooks/mcp_check.py"
+          }
+        ]
       }
     ]
   }
