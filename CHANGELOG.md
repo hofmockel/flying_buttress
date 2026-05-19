@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- feat: add /scaffold skill (`8932675`) — 2026-05-19
+
 - feat: add PreToolUse(Bash) MCP compliance hook (`3ef1df3`) — 2026-05-19
 
 - Add PostToolUse on-write hooks: fmt, lint, test-on-save (`6951f43`) — 2026-05-17
