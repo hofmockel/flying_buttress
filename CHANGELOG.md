@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- fix: correct search-first docstring false claim about WINDOW_SECONDS (`0c2b067`) — 2026-05-20
+
+- fix: search-first docstring no longer falsely claims WINDOW_SECONDS is configurable in search_config.py — 2026-05-20
 - fix: index-refresh now triggers re-embed for root-level .py and .sql files — 2026-05-20
 - chore: remove non-reproducible blank-line accumulation bug from backlog (`1f2271d`) — 2026-05-20
 

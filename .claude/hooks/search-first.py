@@ -2,7 +2,7 @@
 """PreToolUse hook: enforce search-before-Read on indexed files.
 
 Exits 2 with a reminder when an indexed file is Read without a recent search.
-Gate clears for WINDOW_SECONDS after any search; configure in search_config.py.
+Gate clears for WINDOW_SECONDS (hardcoded to 300 s in this file) after any search.
 install.py wires this into .claude/settings.local.json automatically.
 """
 
