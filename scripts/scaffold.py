@@ -10,7 +10,6 @@ See docs/adr/ADR-001-v1-mvp-scope.md and docs/adr/ADR-005-makefile-underlay.md.
 """
 
 import argparse
-import os
 import re
 import shutil
 import subprocess
@@ -95,6 +94,12 @@ def copy_templates(src: Path, dst: Path, vars: dict, add_mode: bool = False) -> 
 
 
 def init_git(path: Path) -> bool:
+    """Return True if git was initialised, False if .git already existed.
+
+    Raises RuntimeError if git init fails (e.g. git not on PATH or
+    permission error), so the caller can distinguish failure from
+    "already initialised".
+    """
     git_dir = path / ".git"
     if git_dir.exists():
         return False
@@ -103,7 +108,11 @@ def init_git(path: Path) -> bool:
         capture_output=True,
         text=True,
     )
-    return result.returncode == 0
+    if result.returncode != 0:
+        raise RuntimeError(
+            f"git init failed (exit {result.returncode}): {result.stderr.strip()}"
+        )
+    return True
 
 
 def _build_parser() -> argparse.ArgumentParser:
@@ -197,7 +206,7 @@ def main(argv=None):
     gitignore = target / ".gitignore"
     if not gitignore.exists():
         gitignore.write_text("\n".join(GITIGNORE_LINES) + "\n")
-        print(f"  [+] .gitignore")
+        print("  [+] .gitignore")
     elif args.add:
         existing = gitignore.read_text(encoding="utf-8").splitlines()
         missing = [ln for ln in GITIGNORE_LINES if ln not in existing]
@@ -206,7 +215,7 @@ def main(argv=None):
                 f.write("\n# flying_buttress\n" + "\n".join(missing) + "\n")
             print(f"  [~] .gitignore — appended {len(missing)} missing line(s)")
         else:
-            print(f"  [~] .gitignore — already complete, skipped")
+            print("  [~] .gitignore — already complete, skipped")
 
     # append flying_buttress section to existing CLAUDE.md (--add mode only)
     if args.add:
@@ -216,26 +225,26 @@ def main(argv=None):
             if "flying_buttress" not in existing_content:
                 with claude_md.open("a", encoding="utf-8") as f:
                     f.write(CLAUDE_MD_SECTION)
-                print(f"  [~] CLAUDE.md — appended flying_buttress section")
+                print("  [~] CLAUDE.md — appended flying_buttress section")
             else:
                 print(
-                    f"  [~] CLAUDE.md — flying_buttress content already present, skipped"
+                    "  [~] CLAUDE.md — flying_buttress content already present, skipped"
                 )
 
     # initialize git
     was_new = init_git(target)
     if was_new:
-        print(f"  [+] git init")
+        print("  [+] git init")
     else:
-        print(f"  [~] git repo already exists — skipped init")
+        print("  [~] git repo already exists — skipped init")
 
     # optional: clone less_tokens
     if install_less_tokens:
         lt_dst = target / "less_tokens"
         if lt_dst.exists():
-            print(f"  [~] less_tokens already present — skipped")
+            print("  [~] less_tokens already present — skipped")
         else:
-            print(f"\nCloning less_tokens...")
+            print("\nCloning less_tokens...")
             result = subprocess.run(
                 [
                     "git",
@@ -247,11 +256,11 @@ def main(argv=None):
                 text=True,
             )
             if result.returncode == 0:
-                print(f"  [+] less_tokens cloned")
+                print("  [+] less_tokens cloned")
                 # add to gitignore
                 with open(target / ".gitignore", "a") as f:
                     f.write("less_tokens/\n")
-                print(f"  [+] less_tokens/ added to .gitignore")
+                print("  [+] less_tokens/ added to .gitignore")
             else:
                 print(f"  [!] less_tokens clone failed: {result.stderr.strip()}")
 
@@ -267,15 +276,15 @@ def main(argv=None):
         if settings_skipped:
             print("  ! .claude/settings.json already exists — compare with")
             print("    templates/.claude/settings.json.tmpl and merge manually")
-        print(f"Next steps:")
-        print(f"  make validate-hooks")
-        print(f"  claude")
+        print("Next steps:")
+        print("  make validate-hooks")
+        print("  claude")
     else:
-        print(f"Done. Next steps:")
+        print("Done. Next steps:")
         print(f"  cd {target}")
-        print(f"  make validate-hooks")
+        print("  make validate-hooks")
         print(
-            f"  claude   # open Claude Code and run /spec to start your first feature"
+            "  claude   # open Claude Code and run /spec to start your first feature"
         )
     print()
 

@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- fix: scaffold init_git() raises on git failure instead of returning False (`5f0fbbb`) — 2026-05-20
+
+- fix: scaffold init_git() raises RuntimeError on git failure instead of returning False — 2026-05-20
 - fix: search-first saved_chars uses char count not byte count (`482287b`) — 2026-05-20
 
 - fix: search-first saved_chars now counts characters not bytes (read_text vs st_size) — 2026-05-20
