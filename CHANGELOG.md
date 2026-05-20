@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- fix: compact-trigger resets last-size on new session; uses char count not bytes (`b940619`) — 2026-05-20
+
+- fix: compact-trigger resets last-size state on new session; uses char count not bytes — 2026-05-20
 - fix: pattern-analyzer fence bugs in _append_entry and _load_existing_skeletons (`ef2cfae`) — 2026-05-20
 
 - fix: pattern-analyzer fence bugs — _append_entry targets jsonlines fence; _load_existing_skeletons ignores non-jsonlines fences — 2026-05-20

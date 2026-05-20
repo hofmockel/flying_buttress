@@ -6,10 +6,10 @@ Hysteresis: only re-fires after another MAX_SESSION_CHARS // 4 of growth.
 Tune threshold in search_config.py. Set to 0 to disable.
 install.py wires this into .claude/settings.local.json automatically.
 """
+
 from __future__ import annotations
 
 import json
-import os
 import sys
 from pathlib import Path
 
@@ -21,7 +21,10 @@ try:
     from savings_log import append as _log_savings
 except Exception:
     MAX_SESSION_CHARS = 500_000
-    def _log_savings(_r: dict) -> None: pass  # noqa: E301
+
+    def _log_savings(_r: dict) -> None:
+        pass  # noqa: E301
+
 
 STATE_FILE = REPO / ".claude" / "state" / "compact-trigger-last"
 
@@ -55,7 +58,7 @@ def main() -> int:
         return 0
 
     try:
-        size = os.path.getsize(transcript_path)
+        size = len(Path(transcript_path).read_text(encoding="utf-8", errors="replace"))
     except OSError:
         return 0
 
@@ -63,15 +66,22 @@ def main() -> int:
         return 0
 
     last = read_last_size()
+    # If transcript shrank (new/shorter session), reset state so hysteresis
+    # doesn't suppress nudges for the new session.
+    if last and size < last:
+        write_last_size(0)
+        last = 0
     hysteresis = MAX_SESSION_CHARS // 4
     if last and size < last + hysteresis:
         return 0
 
     write_last_size(size)
     _log_savings({"strategy": "compaction", "transcript_chars": size, "saved_chars": 0})
-    print(f"Session transcript is now {size:,} chars (threshold {MAX_SESSION_CHARS:,}). "
-          f"Run /compact before the next tool call to reclaim context budget.",
-          file=sys.stderr)
+    print(
+        f"Session transcript is now {size:,} chars (threshold {MAX_SESSION_CHARS:,}). "
+        f"Run /compact before the next tool call to reclaim context budget.",
+        file=sys.stderr,
+    )
     return 2
 
 
