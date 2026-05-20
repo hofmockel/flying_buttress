@@ -8,7 +8,6 @@
 
 | Bug | Description | Status |
 |-----|-------------|--------|
-| **index-refresh misses docs/ and .agents/ files** | Same `is_indexed()` logic gap — edits to `docs/` or `.agents/` files never trigger a background re-embed, leaving the index stale. Hook doesn't even import `INDEXED_ROOT_GLOBS`. `index-refresh.py:32-43`. | open |
 | **search.py crashes on corrupt embedding blob** | `np.frombuffer(...).reshape(-1, DIM)` at line 58-60 is outside any try/except; a single row with a truncated or corrupt embedding raises an unhandled `ValueError` and kills all searches. `search.py:58-60`. | open |
 | **update_docs_on_commit opens CHANGELOG.md relative to CWD** | `Path("CHANGELOG.md")` resolves against the process CWD, not the repo root; hook silently no-ops when invoked from any directory other than the repo root. `update_docs_on_commit.py:45`. | open |
 | **update_docs_on_commit only checks the first `cd` in a chained command** | `re.search` finds the first `cd` match; in a multi-`cd` chain the last destination (the actual commit location) is ignored, causing the hook to exit early when the factory root is the true target. `update_docs_on_commit.py:29`. | open |

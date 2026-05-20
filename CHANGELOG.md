@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- fix: index-refresh now triggers re-embed for root_globs paths (`0d1a9fe`) — 2026-05-20
+
+- fix: index-refresh now triggers re-embed for docs/**/*.md and .agents/*.md by importing and checking INDEXED_ROOT_GLOBS — 2026-05-20
 - fix: search-first gate now enforces search-before-Read for root_globs paths (`1a76b14`) — 2026-05-20
 
 - fix: search-first gate now enforces search-before-Read for docs/**/*.md and .agents/*.md files by consulting INDEXED_ROOT_GLOBS via PurePosixPath.match() — 2026-05-20

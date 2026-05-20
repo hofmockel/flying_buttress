@@ -11,18 +11,20 @@ Multiple rapid edits enqueue multiple refresh processes; each does its own
 content-hash diff and only re-embeds what changed, so they're idempotent and
 self-coalescing — last one wins.
 """
+
 from __future__ import annotations
 
 import json
 import os
 import subprocess
 import sys
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 
 REPO = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(REPO / "tools"))
 from search_config import (  # noqa: E402
     EXCLUDED_DIR_PREFIXES as EXCLUDED_DIRS,
+    INDEXED_ROOT_GLOBS,
     INDEXED_SOURCE_DIRS as INDEXED_DIRS,
     VENV_PY,
 )
@@ -39,7 +41,7 @@ def is_indexed(path: Path) -> bool:
         return rel.endswith(".md")
     if any(rel.startswith(d) for d in INDEXED_DIRS):
         return rel.endswith((".py", ".sql", ".md"))
-    return False
+    return any(PurePosixPath(rel).match(g) for g in INDEXED_ROOT_GLOBS)
 
 
 def main() -> int:
