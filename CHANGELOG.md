@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- fix: bash-logger retains subcommand after --no-* boolean long flags (`4c1d802`) — 2026-05-20
+
+- fix: bash-logger retains subcommand after --no-* boolean long flags — 2026-05-20
 - fix: truncate-output omitted_chars excludes injected marker from kept-chars count (`4d18484`) — 2026-05-20
 
 - fix: truncate-output omitted_chars now excludes injected marker text from kept-chars count — 2026-05-20

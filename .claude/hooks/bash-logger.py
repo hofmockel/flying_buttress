@@ -65,8 +65,21 @@ def extract_skeleton(command: str) -> tuple[str, bool]:
         tok = tokens[i]
         if tok.startswith("-"):
             kept.append(tok)
-            # Drop the flag's value if the next token is not itself a flag
-            if (
+            if tok.startswith("--no-"):
+                # Boolean flag: takes no value. If the next token looks like a
+                # subcommand word, keep it rather than silently dropping it.
+                if (
+                    i + 1 < len(tokens)
+                    and not tokens[i + 1].startswith("-")
+                    and "=" not in tokens[i + 1]
+                    and "/" not in tokens[i + 1]
+                    and "." not in tokens[i + 1]
+                ):
+                    kept.append(tokens[i + 1])
+                    i += 2
+                    continue
+            elif (
+                # Value-taking flag: drop the next non-flag token as its value
                 i + 1 < len(tokens)
                 and not tokens[i + 1].startswith("-")
                 and "=" not in tokens[i + 1]
