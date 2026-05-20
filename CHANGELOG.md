@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- fix: bash-logger uses encoding="utf-8" for active_skill read and log write (`bf9a6fb`) — 2026-05-20
+
+- fix: bash-logger active_skill read and log write now use encoding="utf-8" — 2026-05-20
 - fix: update_docs_on_commit CHANGELOG read/write uses encoding="utf-8" (`5598ddd`) — 2026-05-20
 
 - fix: update_docs_on_commit CHANGELOG read/write now uses encoding="utf-8" — 2026-05-20

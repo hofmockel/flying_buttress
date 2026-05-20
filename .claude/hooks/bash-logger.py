@@ -15,6 +15,7 @@ Skeleton algorithm:
 
 State dir is overridable via BUTTRESS_STATE_DIR env var (used by tests).
 """
+
 from __future__ import annotations
 
 import json
@@ -98,7 +99,7 @@ def main() -> int:
 
     active_skill_file = STATE_DIR / "active_skill"
     try:
-        active_skill = active_skill_file.read_text().strip()
+        active_skill = active_skill_file.read_text(encoding="utf-8").strip()
     except FileNotFoundError:
         active_skill = ""
 
@@ -111,7 +112,7 @@ def main() -> int:
 
     log = STATE_DIR / "bash-log.jsonl"
     log.parent.mkdir(parents=True, exist_ok=True)
-    with log.open("a") as f:
+    with log.open("a", encoding="utf-8") as f:
         f.write(json.dumps(record) + "\n")
 
     return 0
