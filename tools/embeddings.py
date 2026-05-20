@@ -15,6 +15,7 @@ Usage:
   python3 tools/embeddings.py stats           # row counts by source_type
   python3 tools/embeddings.py health          # verify every expected source has chunks
 """
+
 from __future__ import annotations
 
 import argparse
@@ -66,6 +67,7 @@ def _sha256(s: str) -> str:
 
 
 # ----- chunking -------------------------------------------------------------
+
 
 def chunk_markdown(path: Path) -> list[tuple[str, str]]:
     """Split a markdown file by H1/H2/H3 headings."""
@@ -142,7 +144,8 @@ def chunk_sql(path: Path) -> list[tuple[str, str]]:
             continue
         m = re.search(
             r"CREATE\s+(?:TABLE|VIEW|INDEX)\s+(?:IF\s+NOT\s+EXISTS\s+)?(\w+)",
-            b, re.IGNORECASE,
+            b,
+            re.IGNORECASE,
         )
         key = m.group(1) if m else f"stmt:{_sha256(b)[:8]}"
         out.append((key, b))
@@ -171,6 +174,7 @@ def chunk_changelog(path: Path) -> list[tuple[str, str]]:
 
 # ----- source enumeration ---------------------------------------------------
 
+
 def enumerate_sources() -> list[tuple[str, str, str, str]]:
     """Return [(source_type, source_path, source_key, text), ...]."""
     out: list[tuple[str, str, str, str]] = []
@@ -184,10 +188,12 @@ def enumerate_sources() -> list[tuple[str, str, str, str]]:
                 st = "changelog" if f.name == "CHANGELOG.md" else "doc"
                 chunks = chunk_changelog(f) if st == "changelog" else chunk_markdown(f)
                 for k, t in chunks:
-                    out.append((st, f.name, k, t))
+                    out.append((st, f.relative_to(BASE).as_posix(), k, t))
             else:
-                print(f"  WARN: unsupported root glob extension {f.suffix!r} — {f.name} skipped",
-                      file=sys.stderr)
+                print(
+                    f"  WARN: unsupported root glob extension {f.suffix!r} — {f.name} skipped",
+                    file=sys.stderr,
+                )
 
     # Python from indexed subdirs + root .py
     py_paths: list[Path] = []
@@ -218,6 +224,7 @@ def enumerate_sources() -> list[tuple[str, str, str, str]]:
 
 # ----- local embed ---------------------------------------------------------
 
+
 def embed(texts: list[str], input_type: str = "document") -> np.ndarray:
     """Local fastembed encode. Returns (N, DIM) float32 normalized."""
     model = _get_model()
@@ -231,6 +238,7 @@ def embed(texts: list[str], input_type: str = "document") -> np.ndarray:
 
 
 # ----- refresh --------------------------------------------------------------
+
 
 def refresh(full: bool = False) -> int:
     try:
@@ -273,13 +281,13 @@ def refresh(full: bool = False) -> int:
         conn.commit()
 
         unchanged = len(seen) - len(to_embed)
-        print(f"  to embed: {len(to_embed)}  "
-              f"unchanged: {unchanged}  "
-              f"deleted: {deleted}")
+        print(
+            f"  to embed: {len(to_embed)}  unchanged: {unchanged}  deleted: {deleted}"
+        )
 
         embedded = 0
         for i in range(0, len(to_embed), BATCH):
-            batch = to_embed[i:i + BATCH]
+            batch = to_embed[i : i + BATCH]
             texts = [b[3] for b in batch]
             try:
                 vecs = embed(texts)
@@ -357,9 +365,11 @@ def _produces_no_chunks(rel_path: str) -> bool:
         elif suffix == ".sql":
             chunks = chunk_sql(abs_path)
         elif suffix == ".md":
-            chunks = (chunk_changelog(abs_path)
-                      if abs_path.name == "CHANGELOG.md"
-                      else chunk_markdown(abs_path))
+            chunks = (
+                chunk_changelog(abs_path)
+                if abs_path.name == "CHANGELOG.md"
+                else chunk_markdown(abs_path)
+            )
         else:
             return False
     except Exception:
@@ -375,9 +385,11 @@ def health() -> int:
     """
     expected = expected_source_paths()
     with connect_index() as c:
-        counts = dict(c.execute(
-            "SELECT source_path, COUNT(*) FROM documents GROUP BY source_path"
-        ).fetchall())
+        counts = dict(
+            c.execute(
+                "SELECT source_path, COUNT(*) FROM documents GROUP BY source_path"
+            ).fetchall()
+        )
 
     candidate = [src for src in sorted(expected) if counts.get(src, 0) == 0]
     missing = [src for src in candidate if not _produces_no_chunks(src)]
@@ -386,8 +398,10 @@ def health() -> int:
     if not missing:
         total = sum(counts.values())
         suffix = f" ({skipped_empty} empty file(s) ignored)" if skipped_empty else ""
-        print(f"OK — {len(expected)} expected sources covered "
-              f"({total} chunks total){suffix}.")
+        print(
+            f"OK — {len(expected)} expected sources covered "
+            f"({total} chunks total){suffix}."
+        )
         return 0
 
     print(f"⚠ {len(missing)} index gap(s):")
@@ -425,6 +439,7 @@ def main() -> int:
         return health()
     if args.cmd == "savings":
         from stats import main as _savings_main  # noqa: PLC0415
+
         return _savings_main()
     return stats()
 

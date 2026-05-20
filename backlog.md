@@ -8,7 +8,6 @@
 
 | Bug | Description | Status |
 |-----|-------------|--------|
-| **embeddings.py stores `f.name` instead of relative path for root-glob files** | `out.append((st, f.name, k, t))` uses just the filename; `README.md` and `docs/adr/README.md` both get `source_path="README.md"`, so the second upsert silently overwrites the first in the DB. `embeddings.py:191`. | open |
 | **embeddings.py refresh() crashes with unhandled OperationalError on uninitialised DB** | `connect_index()` opens the file but doesn't create schema; `SELECT FROM documents` raises an unhandled `sqlite3.OperationalError` if `db.py init` was never run. `embeddings.py:253-261`. | open |
 | **`make spec SLUG=…` uses `sed -i ''` (BSD/macOS only) — fails on Linux** | GNU `sed` treats the empty-string argument as a filename; spec file placeholders are left unreplaced or the file is corrupted. `Makefile:31`. | open |
 | **`embeddings.py savings` subcommand crashes with unrecognized argument** | `stats.main()` calls `ap.parse_args()` with no args, so it reads `sys.argv` and sees `'savings'` as an unrecognized positional — argparse errors and exits. `embeddings.py:441` + `stats.py:143`. | open |

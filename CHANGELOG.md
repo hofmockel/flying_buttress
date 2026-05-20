@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- fix: embeddings.py enumerate_sources uses relative_to(BASE) not f.name for root-glob source_path (`22954de`) — 2026-05-20
+
+- fix: embeddings.py enumerate_sources uses relative_to(BASE) not f.name for root-glob source_path — 2026-05-20
+
 - fix: compact-trigger resets last-size on new session; uses char count not bytes (`b940619`) — 2026-05-20
 
 - fix: compact-trigger resets last-size state on new session; uses char count not bytes — 2026-05-20
