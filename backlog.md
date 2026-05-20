@@ -8,7 +8,6 @@
 
 | Bug | Description | Status |
 |-----|-------------|--------|
-| **`embeddings.py savings` subcommand crashes with unrecognized argument** | `stats.main()` calls `ap.parse_args()` with no args, so it reads `sys.argv` and sees `'savings'` as an unrecognized positional — argparse errors and exits. `embeddings.py:441` + `stats.py:143`. | open |
 | **`embeddings.py expected_source_paths()` uses `f.name` for root-glob files** | `out.add(f.name)` at line 328 stores only the filename, so `health()` falsely reports no gaps even when the data-loss collision from `enumerate_sources()` has overwritten `docs/adr/README.md` content. `embeddings.py:328`. | open |
 
 ---

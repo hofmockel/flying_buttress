@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- fix: embeddings.py savings subcommand passes [] to stats.main() to avoid argparse consuming sys.argv (`d7c2f8c`) — 2026-05-20
+
+- fix: embeddings.py savings subcommand passes [] to stats.main() to avoid argparse consuming sys.argv — 2026-05-20
+
 - fix: make spec SLUG=… uses portable python3 substitution instead of BSD-only sed -i '' (`2e80d71`) — 2026-05-20
 
 - fix: make spec SLUG=… uses portable python3 substitution instead of BSD-only sed -i '' — 2026-05-20

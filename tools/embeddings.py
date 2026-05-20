@@ -456,7 +456,7 @@ def main() -> int:
     if args.cmd == "savings":
         from stats import main as _savings_main  # noqa: PLC0415
 
-        return _savings_main()
+        return _savings_main([])
     return stats()
 
 

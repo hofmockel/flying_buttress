@@ -7,6 +7,7 @@ Usage:
   python tools/stats.py --all        # show all-time totals
   python tools/stats.py --disable    # turn tracking off
 """
+
 from __future__ import annotations
 
 import argparse
@@ -32,10 +33,10 @@ CHARS_PER_TOKEN = 4
 SESSION_HOURS = 8
 
 _STRATEGY_LABELS = {
-    "truncation":     "Truncation",
+    "truncation": "Truncation",
     "search-blocked": "Search-first block",
-    "search":         "Search (vs full file)",
-    "compaction":     "Compaction nudges",
+    "search": "Search (vs full file)",
+    "compaction": "Compaction nudges",
 }
 
 
@@ -92,7 +93,7 @@ def _build_table_lines(heading: str, records: list[dict]) -> list[str]:
         body_rows.append(
             f"| {lbl:<22} | {d['events']:>6} | {sc_str:>12} | {tok_str:>14} |"
         )
-    sep = f"|{'-'*24}|{'-'*8}|{'-'*14}|{'-'*16}|"
+    sep = f"|{'-' * 24}|{'-' * 8}|{'-' * 14}|{'-' * 16}|"
     return [
         f"## {heading}",
         "",
@@ -106,6 +107,7 @@ def _build_table_lines(heading: str, records: list[dict]) -> list[str]:
 
 def _write_report(session_records: list[dict], all_records: list[dict]) -> Path:
     from datetime import datetime
+
     now = datetime.now().strftime("%Y-%m-%d %H:%M")
     session_label = f"Session (last {SESSION_HOURS}h · {len(session_records)} events)"
     all_label = f"All-time ({len(all_records)} events)"
@@ -125,14 +127,20 @@ def _write_report(session_records: list[dict], all_records: list[dict]) -> Path:
     return REPORT_FILE
 
 
-def main() -> int:
+def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description="Token savings tracker")
-    ap.add_argument("--enable", action="store_true", help="Turn tracking on (non-interactive)")
+    ap.add_argument(
+        "--enable", action="store_true", help="Turn tracking on (non-interactive)"
+    )
     ap.add_argument("--report", action="store_true", help="Write savings-report.md")
     ap.add_argument("--disable", action="store_true", help="Turn tracking off")
-    ap.add_argument("--all", dest="all_time", action="store_true",
-                    help="Show all-time totals instead of session")
-    args = ap.parse_args()
+    ap.add_argument(
+        "--all",
+        dest="all_time",
+        action="store_true",
+        help="Show all-time totals instead of session",
+    )
+    args = ap.parse_args(argv)
 
     if args.enable:
         _set_tracking(True)
