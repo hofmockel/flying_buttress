@@ -27,7 +27,7 @@ def main():
             sys.exit(0)
         # Skip if the commit was in a sibling repo (cd to a different directory).
         # Use findall and take the LAST cd — that's the directory git commit ran in.
-        cd_matches = re.findall(r"(?:^|&&|;)\s*cd\s+(\S+)", command)
+        cd_matches = re.findall(r"(?:^|&&|;|\n)\s*cd\s+(\S+)", command)
         if cd_matches:
             cd_target = str(Path(cd_matches[-1]).resolve())
             if cd_target != factory_root:

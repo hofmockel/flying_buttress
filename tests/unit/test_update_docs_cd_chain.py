@@ -98,3 +98,34 @@ class TestCdChain:
         """No cd in command → CHANGELOG is always written."""
         written = _run_main("git commit -m 'test'")
         assert written, "Should write CHANGELOG when no cd in command"
+
+
+class TestCdNewlineSeparator:
+    """Regression: cd-regex must treat \\n as a command separator.
+
+    Bug: r"(?:^|&&|;)\\s*cd\\s+" has no \\n in the alternation; a cd
+    appearing after a newline mid-command (not at string start) is missed,
+    so the sibling-repo guard is bypassed.
+    update_docs_on_commit.py:29
+    """
+
+    def test_newline_mid_command_cd_to_sibling_skips_changelog(self):
+        """make build\\ncd /sibling\\ngit commit must trigger the guard.
+
+        The cd here is not at string start (^) and not after && or ;,
+        so without \\n in the alternation the regex misses it entirely.
+        """
+        command = "make build\ncd /tmp/other_repo\ngit commit -m 'test'"
+        written = _run_main(command)
+        assert written == [], (
+            "\\n-separated cd to sibling (mid-command) should skip CHANGELOG "
+            "update, but hook missed the \\n separator and wrote anyway"
+        )
+
+    def test_newline_mid_command_cd_to_factory_root_writes_changelog(self):
+        """make build\\ncd factory_root\\ngit commit must still update CHANGELOG."""
+        command = f"make build\ncd {FACTORY_ROOT}\ngit commit -m 'test'"
+        written = _run_main(command)
+        assert written, (
+            "\\n-separated cd to factory root (mid-command) should write CHANGELOG"
+        )
