@@ -38,7 +38,7 @@ def is_indexed(path: Path) -> bool:
     if any(("/" + d) in ("/" + rel) or rel.startswith(d) for d in EXCLUDED_DIRS):
         return False
     if "/" not in rel:
-        return rel.endswith(".md")
+        return rel.endswith((".py", ".sql", ".md"))
     if any(rel.startswith(d) for d in INDEXED_DIRS):
         return rel.endswith((".py", ".sql", ".md"))
     return any(PurePosixPath(rel).match(g) for g in INDEXED_ROOT_GLOBS)

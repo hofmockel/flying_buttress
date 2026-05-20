@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- fix: index-refresh now triggers re-embed for root-level .py and .sql files — 2026-05-20
 - chore: remove non-reproducible blank-line accumulation bug from backlog (`1f2271d`) — 2026-05-20
 
 - fix: update_docs_on_commit cd-regex now recognises \\n as a command separator — 2026-05-20
