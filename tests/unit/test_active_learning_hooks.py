@@ -5,6 +5,7 @@ PYTHONPATH is set to include tools/ so search_config imports work.
 BUTTRESS_STATE_DIR and BUTTRESS_QUEUE_FILE env vars redirect state writes
 to tmp_path for test isolation.
 """
+
 from __future__ import annotations
 
 import json
@@ -37,7 +38,9 @@ def run_hook(
     return result.returncode, result.stdout, result.stderr
 
 
-def run_hook_raw(hook_name: str, stdin: str, extra_env: dict | None = None) -> tuple[int, str, str]:
+def run_hook_raw(
+    hook_name: str, stdin: str, extra_env: dict | None = None
+) -> tuple[int, str, str]:
     env = {**_ENV, **(extra_env or {})}
     result = subprocess.run(
         [sys.executable, str(HOOKS / hook_name)],
@@ -52,6 +55,7 @@ def run_hook_raw(hook_name: str, stdin: str, extra_env: dict | None = None) -> t
 # ---------------------------------------------------------------------------
 # bash-logger.py
 # ---------------------------------------------------------------------------
+
 
 class TestBashLogger:
     def test_logs_command_and_skeleton(self, tmp_path):
@@ -80,7 +84,10 @@ class TestBashLogger:
     def test_skeleton_strips_quoted_flag_values(self, tmp_path):
         code, _, _ = run_hook(
             "bash-logger.py",
-            {"tool_name": "Bash", "tool_input": {"command": 'git commit -m "fix thing"'}},
+            {
+                "tool_name": "Bash",
+                "tool_input": {"command": 'git commit -m "fix thing"'},
+            },
             {"BUTTRESS_STATE_DIR": str(tmp_path)},
         )
         assert code == 0
@@ -157,6 +164,7 @@ class TestBashLogger:
 # pattern-analyzer.py
 # ---------------------------------------------------------------------------
 
+
 def _write_log(state_dir: Path, entries: list[dict]) -> None:
     log = state_dir / "bash-log.jsonl"
     log.parent.mkdir(parents=True, exist_ok=True)
@@ -208,9 +216,8 @@ class TestPatternAnalyzer:
 
     def test_threshold_hit_ambiguous_multi_skill_needs_confirmation(self, tmp_path):
         queue = tmp_path / "queue.md"
-        records = (
-            _make_records("grep -r", "spec", 3)
-            + _make_records("grep -r", "bugfix", 3)
+        records = _make_records("grep -r", "spec", 3) + _make_records(
+            "grep -r", "bugfix", 3
         )
         _write_log(tmp_path, records)
         run_hook(
@@ -234,10 +241,16 @@ class TestPatternAnalyzer:
 
     def test_skips_existing_pending_entry(self, tmp_path):
         queue = tmp_path / "queue.md"
-        existing = json.dumps({
-            "date": "2026-05-16", "skeleton": "git status", "seen": 5,
-            "active_skill": "spec", "suggested_tool": "git_status", "status": "pending",
-        })
+        existing = json.dumps(
+            {
+                "date": "2026-05-16",
+                "skeleton": "git status",
+                "seen": 5,
+                "active_skill": "spec",
+                "suggested_tool": "git_status",
+                "status": "pending",
+            }
+        )
         queue.write_text(
             "<!-- promote_queue: do not edit the fenced block manually -->\n"
             "```jsonlines\n"
@@ -254,10 +267,16 @@ class TestPatternAnalyzer:
 
     def test_skips_existing_accepted_entry(self, tmp_path):
         queue = tmp_path / "queue.md"
-        existing = json.dumps({
-            "date": "2026-05-16", "skeleton": "git diff", "seen": 5,
-            "active_skill": "spec", "suggested_tool": "git_diff", "status": "accepted",
-        })
+        existing = json.dumps(
+            {
+                "date": "2026-05-16",
+                "skeleton": "git diff",
+                "seen": 5,
+                "active_skill": "spec",
+                "suggested_tool": "git_diff",
+                "status": "accepted",
+            }
+        )
         queue.write_text(
             "<!-- promote_queue: do not edit the fenced block manually -->\n"
             "```jsonlines\n"
@@ -274,10 +293,16 @@ class TestPatternAnalyzer:
 
     def test_dismissed_entry_allows_new_pending(self, tmp_path):
         queue = tmp_path / "queue.md"
-        existing = json.dumps({
-            "date": "2026-05-01", "skeleton": "make lint", "seen": 5,
-            "active_skill": "spec", "suggested_tool": "make_lint", "status": "dismissed",
-        })
+        existing = json.dumps(
+            {
+                "date": "2026-05-01",
+                "skeleton": "make lint",
+                "seen": 5,
+                "active_skill": "spec",
+                "suggested_tool": "make_lint",
+                "status": "dismissed",
+            }
+        )
         queue.write_text(
             "<!-- promote_queue: do not edit the fenced block manually -->\n"
             "```jsonlines\n"
@@ -296,7 +321,14 @@ class TestPatternAnalyzer:
         queue = tmp_path / "queue.md"
         log = tmp_path / "bash-log.jsonl"
         log.parent.mkdir(parents=True, exist_ok=True)
-        good = json.dumps({"ts": 1.0, "command": "git log", "skeleton": "git log", "active_skill": "spec"})
+        good = json.dumps(
+            {
+                "ts": 1.0,
+                "command": "git log",
+                "skeleton": "git log",
+                "active_skill": "spec",
+            }
+        )
         with log.open("w") as f:
             f.write("{{corrupt\n")
             for _ in range(5):
@@ -334,6 +366,7 @@ class TestPatternAnalyzer:
 # tool-registry.py
 # ---------------------------------------------------------------------------
 
+
 class TestToolRegistry:
     def test_write_to_tools_path_exits_two_with_message(self):
         file_path = str(REPO / ".claude" / "skills" / "spec" / "tools" / "fetch_api.py")
@@ -345,7 +378,9 @@ class TestToolRegistry:
         assert "tool_registry.json" in stderr
 
     def test_nested_skill_tools_path_matched(self):
-        file_path = str(REPO / ".claude" / "skills" / "my-skill" / "tools" / "call_db.py")
+        file_path = str(
+            REPO / ".claude" / "skills" / "my-skill" / "tools" / "call_db.py"
+        )
         code, _, stderr = run_hook(
             "tool-registry.py",
             {"tool_name": "Write", "tool_input": {"file_path": file_path}},
@@ -374,6 +409,23 @@ class TestToolRegistry:
             {"tool_name": "Edit", "tool_input": {"file_path": "/tmp/foo.py"}},
         )
         assert code == 0
+
+    def test_edit_to_tools_path_exits_two_with_message(self):
+        """Regression: Edit on a skill tools/*.py must trigger registry reminder.
+
+        Bug: hook checked tool_name != 'Write', so Edit calls on existing tool
+        stubs never fired the registry-update reminder.
+        """
+        file_path = str(REPO / ".claude" / "skills" / "spec" / "tools" / "fetch_api.py")
+        code, _, stderr = run_hook(
+            "tool-registry.py",
+            {"tool_name": "Edit", "tool_input": {"file_path": file_path}},
+        )
+        assert code == 2, (
+            f"Edit on a skill tool stub should exit 2 but got {code}; "
+            "hook is ignoring Edit tool calls"
+        )
+        assert "tool_registry.json" in stderr
 
     def test_missing_file_path_exits_zero(self):
         code, _, _ = run_hook(

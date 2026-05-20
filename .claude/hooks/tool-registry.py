@@ -5,6 +5,7 @@ When a Write targets .claude/skills/*/tools/*.py, exits 2 with a message
 instructing Claude to add an entry to .claude/tool_registry.json.
 Exits 0 for all other writes.
 """
+
 from __future__ import annotations
 
 import fnmatch
@@ -22,7 +23,7 @@ def main() -> int:
     except Exception:
         return 0
 
-    if payload.get("tool_name") != "Write":
+    if payload.get("tool_name") not in ("Write", "Edit"):
         return 0
 
     file_path = payload.get("tool_input", {}).get("file_path", "")

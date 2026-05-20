@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- fix: tool-registry hook now triggers on Edit as well as Write (`c128b59`) — 2026-05-20
+
+- fix: tool-registry hook now triggers on Edit as well as Write for skill tool stubs — 2026-05-20
 - fix: mcp_check curl regex ^curls?$ -> ^curl$ eliminates phantom match (`8ebc33a`) — 2026-05-20
 
 - fix: mcp_check.py curl regex changed from ^curls?$ to ^curl$ — eliminates spurious match on phantom command 'curls' — 2026-05-20
