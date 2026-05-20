@@ -250,17 +250,33 @@ def refresh(full: bool = False) -> int:
     sources = enumerate_sources()
     print(f"Enumerated {len(sources)} chunks from sources")
 
-    with connect_index() as conn:
-        if full:
-            conn.execute("DELETE FROM documents")
-            conn.commit()
+    try:
+        ctx = connect_index()
+    except Exception as e:
+        print(
+            f"ERROR: could not open index DB: {e} — run `python3 tools/db.py init` first",
+            file=sys.stderr,
+        )
+        return 1
 
-        existing = {
-            (r[0], r[1]): r[2]
-            for r in conn.execute(
-                "SELECT source_path, source_key, content_hash FROM documents"
-            ).fetchall()
-        }
+    with ctx as conn:
+        try:
+            if full:
+                conn.execute("DELETE FROM documents")
+                conn.commit()
+
+            existing = {
+                (r[0], r[1]): r[2]
+                for r in conn.execute(
+                    "SELECT source_path, source_key, content_hash FROM documents"
+                ).fetchall()
+            }
+        except Exception as e:
+            print(
+                f"ERROR: DB not initialised: {e} — run `python3 tools/db.py init` first",
+                file=sys.stderr,
+            )
+            return 1
         seen: set[tuple[str, str]] = set()
 
         to_embed: list[tuple[str, str, str, str, str]] = []
