@@ -341,7 +341,7 @@ def expected_source_paths() -> set[str]:
         for f in sorted(BASE.glob(glob)):
             if _excluded(f):
                 continue
-            out.add(f.name)
+            out.add(f.relative_to(BASE).as_posix())
     py_paths: list[Path] = []
     for dir_str in INDEXED_SOURCE_DIRS:
         d = BASE / dir_str.rstrip("/")

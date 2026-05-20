@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- fix: embeddings.py expected_source_paths uses relative_to(BASE) not f.name for root-glob paths (`031c375`) — 2026-05-20
+
+- fix: embeddings.py expected_source_paths uses relative_to(BASE) not f.name for root-glob paths — 2026-05-20
+
 - fix: embeddings.py savings subcommand passes [] to stats.main() to avoid argparse consuming sys.argv (`d7c2f8c`) — 2026-05-20
 
 - fix: embeddings.py savings subcommand passes [] to stats.main() to avoid argparse consuming sys.argv — 2026-05-20
