@@ -11,6 +11,7 @@ Dismissed entries are allowed to re-appear if the pattern recurs.
 
 State dir overridable via BUTTRESS_STATE_DIR; queue file via BUTTRESS_QUEUE_FILE.
 """
+
 from __future__ import annotations
 
 import json
@@ -53,7 +54,7 @@ def _load_existing_skeletons(queue_file: Path) -> set[str]:
         return set()
     active: set[str] = set()
     in_block = False
-    for line in queue_file.read_text().splitlines():
+    for line in queue_file.read_text(encoding="utf-8").splitlines():
         stripped = line.strip()
         if stripped.startswith("```"):
             in_block = not in_block
@@ -71,15 +72,15 @@ def _load_existing_skeletons(queue_file: Path) -> set[str]:
 def _append_entry(queue_file: Path, entry: dict) -> None:
     queue_file.parent.mkdir(parents=True, exist_ok=True)
     if not queue_file.exists():
-        queue_file.write_text(_HEADER + _FENCE_OPEN + _FENCE_CLOSE)
+        queue_file.write_text(_HEADER + _FENCE_OPEN + _FENCE_CLOSE, encoding="utf-8")
 
-    text = queue_file.read_text()
+    text = queue_file.read_text(encoding="utf-8")
     idx = text.rfind(_FENCE_CLOSE)
     if idx == -1:
         text += f"\n{_FENCE_OPEN}{json.dumps(entry)}\n{_FENCE_CLOSE}"
     else:
         text = text[:idx] + json.dumps(entry) + "\n" + text[idx:]
-    queue_file.write_text(text)
+    queue_file.write_text(text, encoding="utf-8")
 
 
 def main() -> int:
@@ -93,7 +94,7 @@ def main() -> int:
         return 0
 
     records: list[dict] = []
-    for line in log.read_text().splitlines():
+    for line in log.read_text(encoding="utf-8").splitlines():
         line = line.strip()
         if not line:
             continue
@@ -128,9 +129,8 @@ def main() -> int:
 
         skills = skeleton_skills[skeleton]
         base = skeleton.split()[0]
-        is_ambiguous = (
-            len(skills) > 1
-            or (len(skeleton.split()) == 1 and base in _INTERPRETERS)
+        is_ambiguous = len(skills) > 1 or (
+            len(skeleton.split()) == 1 and base in _INTERPRETERS
         )
 
         entry = {

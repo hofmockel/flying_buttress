@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- fix: pattern-analyzer queue and bash-log file I/O uses encoding="utf-8" (`9b82da7`) — 2026-05-20
+
+- fix: pattern-analyzer queue and bash-log file I/O now uses encoding="utf-8" — 2026-05-20
 - fix: bash-logger uses encoding="utf-8" for active_skill read and log write (`bf9a6fb`) — 2026-05-20
 
 - fix: bash-logger active_skill read and log write now use encoding="utf-8" — 2026-05-20
