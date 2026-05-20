@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- fix: update_docs_on_commit resolves CHANGELOG.md from repo root not CWD (`4502d20`) — 2026-05-20
+
+- fix: update_docs_on_commit resolves CHANGELOG.md from repo root not CWD — 2026-05-20
 - fix: search() skips corrupt embedding blobs instead of crashing (`6ff98c7`) — 2026-05-20
 
 - fix: search() skips corrupt embedding blobs instead of crashing with ValueError; warns to stderr — 2026-05-20

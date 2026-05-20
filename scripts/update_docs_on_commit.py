@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Run after every git commit. Inserts a CHANGELOG entry under [Unreleased]."""
+
 import json
 import re
 import subprocess
@@ -25,7 +26,7 @@ def main():
         if "--amend" in command:
             sys.exit(0)
         # Skip if the commit was in a sibling repo (cd to a different directory)
-        cd_match = re.search(r'(?:^|&&|;)\s*cd\s+(\S+)', command)
+        cd_match = re.search(r"(?:^|&&|;)\s*cd\s+(\S+)", command)
         if cd_match:
             cd_target = str(Path(cd_match.group(1)).resolve())
             if cd_target != factory_root:
@@ -41,7 +42,7 @@ def main():
     if not hash_ or not msg:
         sys.exit(0)
 
-    changelog = Path("CHANGELOG.md")
+    changelog = Path(__file__).parent.parent / "CHANGELOG.md"
     if not changelog.exists():
         sys.exit(0)
 
@@ -70,17 +71,21 @@ def main():
 
     changelog.write_text(new_content)
 
-    print(json.dumps({
-        "systemMessage": f"CHANGELOG updated: {entry}",
-        "hookSpecificOutput": {
-            "hookEventName": "PostToolUse",
-            "additionalContext": (
-                f"CHANGELOG.md was auto-updated with: {entry}\n"
-                "The file has uncommitted changes. Amend the current commit "
-                "(`git commit --amend --no-edit`) or include it in the next one."
-            ),
-        },
-    }))
+    print(
+        json.dumps(
+            {
+                "systemMessage": f"CHANGELOG updated: {entry}",
+                "hookSpecificOutput": {
+                    "hookEventName": "PostToolUse",
+                    "additionalContext": (
+                        f"CHANGELOG.md was auto-updated with: {entry}\n"
+                        "The file has uncommitted changes. Amend the current commit "
+                        "(`git commit --amend --no-edit`) or include it in the next one."
+                    ),
+                },
+            }
+        )
+    )
 
 
 if __name__ == "__main__":
