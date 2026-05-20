@@ -24,7 +24,7 @@ REPO = Path(__file__).resolve().parent.parent.parent
 # Patterns: (regex_on_base_command, suggested_mcp_connector, human_label)
 _PATTERNS: list[tuple[re.Pattern, str, str]] = [
     (
-        re.compile(r"^curls?$|^wget$|^http$|^httpie$"),
+        re.compile(r"^curl$|^wget$|^http$|^httpie$"),
         "mcp__fetch or mcp__brave_search",
         "HTTP request",
     ),

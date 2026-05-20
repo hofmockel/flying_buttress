@@ -194,3 +194,18 @@ class TestMain:
         for cmd in ["curl https://x.com", "psql -U postgres", "redis-cli ping"]:
             code, _ = _run(_payload(cmd))
             assert code == 0, f"Expected exit 0 for '{cmd}', got {code}"
+
+
+class TestCurlRegex:
+    """Regression: ^curls?$ matched phantom command 'curls' (mcp_check.py:27)."""
+
+    def test_curl_is_flagged(self):
+        """The real command 'curl' must still trigger the MCP advisory."""
+        assert mcp_check.check("curl https://example.com") is not None
+
+    def test_curls_is_not_flagged(self):
+        """'curls' is not a real command and must NOT trigger the MCP advisory."""
+        result = mcp_check.check("curls https://example.com")
+        assert result is None, (
+            f"'curls' should not match the curl pattern but got: {result!r}"
+        )

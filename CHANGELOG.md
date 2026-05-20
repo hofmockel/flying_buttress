@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- fix: mcp_check curl regex ^curls?$ -> ^curl$ eliminates phantom match (`8ebc33a`) — 2026-05-20
+
+- fix: mcp_check.py curl regex changed from ^curls?$ to ^curl$ — eliminates spurious match on phantom command 'curls' — 2026-05-20
 - fix: update_docs_on_commit resolves CHANGELOG.md from repo root not CWD (`4502d20`) — 2026-05-20
 
 - fix: update_docs_on_commit resolves CHANGELOG.md from repo root not CWD — 2026-05-20
