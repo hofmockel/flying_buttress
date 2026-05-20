@@ -19,7 +19,6 @@
 | **bash-logger drops subcommand after boolean long flags** | Flag-value drop logic fires unconditionally on any non-flag next token; `git --no-pager log` produces skeleton `git --no-pager`, silently losing the `log` subcommand. `bash-logger.py:69-75`. | open |
 | **`embeddings.py expected_source_paths()` uses `f.name` for root-glob files** | `out.add(f.name)` at line 328 stores only the filename, so `health()` falsely reports no gaps even when the data-loss collision from `enumerate_sources()` has overwritten `docs/adr/README.md` content. `embeddings.py:328`. | open |
 | **`compact-trigger` compares transcript size in bytes against `MAX_SESSION_CHARS` (chars)** | `os.path.getsize()` returns bytes; `MAX_SESSION_CHARS` is documented and named as a character count; for transcripts with multi-byte UTF-8 content the nudge fires earlier than intended. `compact-trigger.py:62`. | open |
-| **`search.py` savings log mixes `st_size` (bytes) with `len(text)` (chars)** | `full_file_chars += Path(fp).stat().st_size` counts bytes; `chunk_chars` counts characters; the subtraction overstates `saved_chars` for any file with non-ASCII content. `search.py:99-100`. | open |
 
 ---
 

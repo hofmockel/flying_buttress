@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- fix: search.py savings log uses char count not byte count for full_file_chars (`f5de109`) — 2026-05-20
+
+- fix: search.py savings log full_file_chars now counts characters not bytes — 2026-05-20
 - fix: pattern-analyzer queue and bash-log file I/O uses encoding="utf-8" (`9b82da7`) — 2026-05-20
 
 - fix: pattern-analyzer queue and bash-log file I/O now uses encoding="utf-8" — 2026-05-20

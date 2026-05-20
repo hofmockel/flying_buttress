@@ -108,7 +108,9 @@ def main() -> int:
         full_file_chars = 0
         for fp in unique_paths:
             try:
-                full_file_chars += (BASE / fp).stat().st_size
+                full_file_chars += len(
+                    (BASE / fp).read_text(encoding="utf-8", errors="replace")
+                )
             except OSError:
                 pass
         _log_savings(
