@@ -7,6 +7,7 @@ Read/WebFetch: 60/40 character split.
 Tune ceiling in search_config.py. Set to 0 to disable.
 install.py wires this into .claude/settings.local.json automatically.
 """
+
 from __future__ import annotations
 
 import json
@@ -27,7 +28,10 @@ except Exception:
     MAX_TOOL_OUTPUT_CHARS = 4000
     TOOL_OUTPUT_HEAD_LINES = 50
     TOOL_OUTPUT_TAIL_LINES = 20
-    def _log_savings(_r: dict) -> None: pass  # noqa: E301
+
+    def _log_savings(_r: dict) -> None:
+        pass  # noqa: E301
+
 
 _TARGETED_TOOLS = {"Bash", "Read", "WebFetch"}
 
@@ -39,7 +43,11 @@ def truncate_chars(text: str, ceiling: int) -> str:
     head_chars = int(ceiling * 0.6)
     tail_chars = ceiling - head_chars
     omitted = len(text) - head_chars - tail_chars
-    return text[:head_chars] + f"\n[... {omitted:,} chars omitted ...]\n" + text[-tail_chars:]
+    return (
+        text[:head_chars]
+        + f"\n[... {omitted:,} chars omitted ...]\n"
+        + text[-tail_chars:]
+    )
 
 
 def truncate_bash(text: str, head: int, tail: int, ceiling: int) -> str:
@@ -52,7 +60,11 @@ def truncate_bash(text: str, head: int, tail: int, ceiling: int) -> str:
     omitted_lines = tail_start - head
     if omitted_lines <= 0:
         return truncate_chars(text, ceiling)
-    result = "\n".join(kept_head) + f"\n[... {omitted_lines:,} lines omitted ...]\n" + "\n".join(kept_tail)
+    result = (
+        "\n".join(kept_head)
+        + f"\n[... {omitted_lines:,} lines omitted ...]\n"
+        + "\n".join(kept_tail)
+    )
     if len(result) > ceiling:
         return truncate_chars(result, ceiling)
     return result
@@ -78,16 +90,35 @@ def main() -> int:
         return 0
 
     if tool_name == "Bash":
-        truncated = truncate_bash(tool_result, TOOL_OUTPUT_HEAD_LINES, TOOL_OUTPUT_TAIL_LINES, MAX_TOOL_OUTPUT_CHARS)
+        truncated = truncate_bash(
+            tool_result,
+            TOOL_OUTPUT_HEAD_LINES,
+            TOOL_OUTPUT_TAIL_LINES,
+            MAX_TOOL_OUTPUT_CHARS,
+        )
     else:
         truncated = truncate_chars(tool_result, MAX_TOOL_OUTPUT_CHARS)
 
-    omitted_chars = len(tool_result) - len(truncated)
-    _log_savings({"strategy": "truncation", "tool": tool_name,
-                  "original_chars": len(tool_result), "saved_chars": omitted_chars})
+    # len(truncated) includes the injected omission marker (~29 chars), which
+    # would understate omitted_chars. Strip the marker(s) first so we measure
+    # only the chars actually kept from the original.
+    import re as _re
+
+    _marker_re = _re.compile(r"\n\[\.\.\. [\d,]+ (?:chars|lines) omitted \.\.\.\]\n")
+    omitted_chars = len(tool_result) - len(_marker_re.sub("", truncated))
+    _log_savings(
+        {
+            "strategy": "truncation",
+            "tool": tool_name,
+            "original_chars": len(tool_result),
+            "saved_chars": omitted_chars,
+        }
+    )
     print(truncated)
-    print(f"[truncated — {omitted_chars:,} chars omitted ({len(tool_result):,} total)]",
-          file=sys.stderr)
+    print(
+        f"[truncated — {omitted_chars:,} chars omitted ({len(tool_result):,} total)]",
+        file=sys.stderr,
+    )
     return 2
 
 

@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- fix: truncate-output omitted_chars excludes injected marker from kept-chars count (`4d18484`) — 2026-05-20
+
+- fix: truncate-output omitted_chars now excludes injected marker text from kept-chars count — 2026-05-20
 - fix: search.py savings log uses char count not byte count for full_file_chars (`f5de109`) — 2026-05-20
 
 - fix: search.py savings log full_file_chars now counts characters not bytes — 2026-05-20
