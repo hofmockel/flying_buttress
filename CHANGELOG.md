@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- chore: remove non-reproducible blank-line accumulation bug from backlog (`1f2271d`) — 2026-05-20
+
 - fix: update_docs_on_commit cd-regex now recognises \\n as a command separator — 2026-05-20
 - fix: update_docs_on_commit uses last cd in chain, not first, for sibling-repo guard — 2026-05-20
 - fix: tool-registry hook now triggers on Edit as well as Write (`c128b59`) — 2026-05-20
