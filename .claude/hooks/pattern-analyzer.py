@@ -53,13 +53,16 @@ def _load_existing_skeletons(queue_file: Path) -> set[str]:
     if not queue_file.exists():
         return set()
     active: set[str] = set()
-    in_block = False
+    in_jsonlines_block = False
     for line in queue_file.read_text(encoding="utf-8").splitlines():
         stripped = line.strip()
-        if stripped.startswith("```"):
-            in_block = not in_block
+        if stripped == "```jsonlines":
+            in_jsonlines_block = True
             continue
-        if in_block and stripped:
+        if stripped == "```" and in_jsonlines_block:
+            in_jsonlines_block = False
+            continue
+        if in_jsonlines_block and stripped:
             try:
                 entry = json.loads(stripped)
                 if entry.get("status") != "dismissed":
@@ -75,11 +78,17 @@ def _append_entry(queue_file: Path, entry: dict) -> None:
         queue_file.write_text(_HEADER + _FENCE_OPEN + _FENCE_CLOSE, encoding="utf-8")
 
     text = queue_file.read_text(encoding="utf-8")
-    idx = text.rfind(_FENCE_CLOSE)
-    if idx == -1:
+    # Find the closing fence of the jsonlines block specifically — not the last
+    # fence in the file (which may belong to an unrelated markdown block).
+    open_idx = text.find(_FENCE_OPEN)
+    if open_idx == -1:
         text += f"\n{_FENCE_OPEN}{json.dumps(entry)}\n{_FENCE_CLOSE}"
     else:
-        text = text[:idx] + json.dumps(entry) + "\n" + text[idx:]
+        close_idx = text.find(_FENCE_CLOSE, open_idx + len(_FENCE_OPEN))
+        if close_idx == -1:
+            text += f"\n{_FENCE_OPEN}{json.dumps(entry)}\n{_FENCE_CLOSE}"
+        else:
+            text = text[:close_idx] + json.dumps(entry) + "\n" + text[close_idx:]
     queue_file.write_text(text, encoding="utf-8")
 
 

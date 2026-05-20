@@ -8,8 +8,6 @@
 
 | Bug | Description | Status |
 |-----|-------------|--------|
-| **pattern-analyzer _append_entry inserts into the last fence, not the jsonlines fence** | `text.rfind(_FENCE_CLOSE)` finds the last ` ``` ` in the file; any markdown block after the jsonlines block causes new entries to land in the wrong fence, corrupting both blocks. `pattern-analyzer.py:78`. | open |
-| **pattern-analyzer _load_existing_skeletons toggles on any fence marker** | `if stripped.startswith("```"): in_block = not in_block` triggers on every fence opener/closer regardless of language; JSON objects in other fenced blocks are falsely counted as already-queued skeletons. `pattern-analyzer.py:59`. | open |
 | **compact-trigger `last` state never resets between sessions** | After a large session fires the nudge (e.g. 2 MB), a subsequent smaller-but-over-threshold session (e.g. 600 KB) is silently skipped because `size < last + hysteresis`. State file is never cleared on new/smaller sessions. `compact-trigger.py:71`. | open |
 | **embeddings.py stores `f.name` instead of relative path for root-glob files** | `out.append((st, f.name, k, t))` uses just the filename; `README.md` and `docs/adr/README.md` both get `source_path="README.md"`, so the second upsert silently overwrites the first in the DB. `embeddings.py:191`. | open |
 | **embeddings.py refresh() crashes with unhandled OperationalError on uninitialised DB** | `connect_index()` opens the file but doesn't create schema; `SELECT FROM documents` raises an unhandled `sqlite3.OperationalError` if `db.py init` was never run. `embeddings.py:253-261`. | open |

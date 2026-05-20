@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- fix: pattern-analyzer fence bugs in _append_entry and _load_existing_skeletons (`ef2cfae`) — 2026-05-20
+
+- fix: pattern-analyzer fence bugs — _append_entry targets jsonlines fence; _load_existing_skeletons ignores non-jsonlines fences — 2026-05-20
 - fix: bash-logger retains subcommand after --no-* boolean long flags (`4c1d802`) — 2026-05-20
 
 - fix: bash-logger retains subcommand after --no-* boolean long flags — 2026-05-20
