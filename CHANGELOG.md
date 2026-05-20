@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- fix: search-first gate now enforces search-before-Read for root_globs paths (`1a76b14`) — 2026-05-20
+
+- fix: search-first gate now enforces search-before-Read for docs/**/*.md and .agents/*.md files by consulting INDEXED_ROOT_GLOBS via PurePosixPath.match() — 2026-05-20
+
+- feat: add --add mode for non-destructive install into existing projects (`16c17fa`) — 2026-05-19
+
+- feat: add --add mode for non-destructive install into existing projects (`16c17fa`) — 2026-05-19
+
 - feat: add --add mode for non-destructive install into existing projects (`c2dff29`) — 2026-05-19
 
 - feat: add /scaffold skill (`8932675`) — 2026-05-19

@@ -5,12 +5,13 @@ Exits 2 with a reminder when an indexed file is Read without a recent search.
 Gate clears for WINDOW_SECONDS after any search; configure in search_config.py.
 install.py wires this into .claude/settings.local.json automatically.
 """
+
 from __future__ import annotations
 
 import json
 import sys
 import time
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 
 REPO = Path(__file__).resolve().parent.parent.parent
 
@@ -31,16 +32,21 @@ def _load_config() -> bool:
             STATE_DIR,
             VENV_PY,
         )
+
         _config["excluded"] = EXCLUDED_DIRS
         _config["root_globs"] = INDEXED_ROOT_GLOBS
         _config["dirs"] = INDEXED_DIRS
         _config["venv_py"] = VENV_PY
         _config["state_file"] = STATE_DIR / "last-search"
         from savings_log import append as _log  # noqa: PLC0415
+
         _config["log"] = _log
         return True
     except Exception as e:
-        print(f"search-first: could not load search_config ({e}); gate disabled", file=sys.stderr)
+        print(
+            f"search-first: could not load search_config ({e}); gate disabled",
+            file=sys.stderr,
+        )
         return False
 
 
@@ -57,7 +63,8 @@ def is_indexed(path: Path) -> bool:
         return rel.endswith(".md")
     if any(rel.startswith(d) for d in dirs):
         return rel.endswith((".py", ".sql", ".md"))
-    return False
+    root_globs = _config.get("root_globs", ())
+    return any(PurePosixPath(rel).match(g) for g in root_globs)
 
 
 def search_was_recent() -> bool:
@@ -104,7 +111,7 @@ def main() -> int:
     msg = (
         f"Search-first rule (CLAUDE.md): {rel} is indexed.\n"
         f"Run vector search before Read:\n"
-        f"  {venv_py} tools/search.py \"<your query>\"\n"
+        f'  {venv_py} tools/search.py "<your query>"\n'
         f"After a search, Reads on indexed files are allowed for "
         f"{WINDOW_SECONDS}s. If you need to edit this file, search first to "
         f"satisfy the gate, then Read + Edit normally."
