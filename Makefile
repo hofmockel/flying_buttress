@@ -28,9 +28,13 @@ ifdef SLUG
 		echo "Already exists: docs/specs/$(SLUG).md"; \
 	else \
 		cp templates/docs/specs/spec.md.tmpl docs/specs/$(SLUG).md; \
-		sed -i '' \
-			's/{{slug}}/$(SLUG)/g; s/{{date}}/$(shell date +%Y-%m-%d)/g' \
-			docs/specs/$(SLUG).md; \
+		python3 -c "\
+import pathlib; \
+p = pathlib.Path('docs/specs/$(SLUG).md'); \
+txt = p.read_text(encoding='utf-8'); \
+txt = txt.replace('{{slug}}', '$(SLUG)').replace('{{date}}', '$(shell date +%Y-%m-%d)'); \
+p.write_text(txt, encoding='utf-8') \
+"; \
 		echo "Created: docs/specs/$(SLUG).md"; \
 	fi
 else
