@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- fix: search-first saved_chars uses char count not byte count (`482287b`) — 2026-05-20
+
+- fix: search-first saved_chars now counts characters not bytes (read_text vs st_size) — 2026-05-20
 - fix: correct search-first docstring false claim about WINDOW_SECONDS (`0c2b067`) — 2026-05-20
 
 - fix: search-first docstring no longer falsely claims WINDOW_SECONDS is configurable in search_config.py — 2026-05-20

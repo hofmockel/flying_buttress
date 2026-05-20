@@ -102,7 +102,7 @@ def main() -> int:
     venv_py = _config.get("venv_py", "python3")
     rel = p.resolve().relative_to(REPO).as_posix()
     try:
-        file_chars = p.stat().st_size
+        file_chars = len(p.read_text(encoding="utf-8", errors="replace"))
     except OSError:
         file_chars = 0
     _config.get("log", lambda _: None)(
