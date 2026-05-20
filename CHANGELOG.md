@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- fix: update_docs_on_commit CHANGELOG read/write uses encoding="utf-8" (`5598ddd`) — 2026-05-20
+
+- fix: update_docs_on_commit CHANGELOG read/write now uses encoding="utf-8" — 2026-05-20
 - fix: scaffold init_git() raises on git failure instead of returning False (`5f0fbbb`) — 2026-05-20
 
 - fix: scaffold init_git() raises RuntimeError on git failure instead of returning False — 2026-05-20

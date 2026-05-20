@@ -47,7 +47,7 @@ def main():
     if not changelog.exists():
         sys.exit(0)
 
-    content = changelog.read_text()
+    content = changelog.read_text(encoding="utf-8")
     entry = f"- {msg} (`{hash_}`) — {date}"
 
     lines = content.split("\n")
@@ -70,7 +70,7 @@ def main():
     if new_content == content:
         sys.exit(0)
 
-    changelog.write_text(new_content)
+    changelog.write_text(new_content, encoding="utf-8")
 
     print(
         json.dumps(
