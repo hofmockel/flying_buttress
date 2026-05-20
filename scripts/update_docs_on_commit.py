@@ -25,10 +25,11 @@ def main():
         command = json.loads(sys.stdin.read()).get("tool_input", {}).get("command", "")
         if "--amend" in command:
             sys.exit(0)
-        # Skip if the commit was in a sibling repo (cd to a different directory)
-        cd_match = re.search(r"(?:^|&&|;)\s*cd\s+(\S+)", command)
-        if cd_match:
-            cd_target = str(Path(cd_match.group(1)).resolve())
+        # Skip if the commit was in a sibling repo (cd to a different directory).
+        # Use findall and take the LAST cd — that's the directory git commit ran in.
+        cd_matches = re.findall(r"(?:^|&&|;)\s*cd\s+(\S+)", command)
+        if cd_matches:
+            cd_target = str(Path(cd_matches[-1]).resolve())
             if cd_target != factory_root:
                 sys.exit(0)
     except (json.JSONDecodeError, AttributeError):

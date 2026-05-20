@@ -8,7 +8,6 @@
 
 | Bug | Description | Status |
 |-----|-------------|--------|
-| **update_docs_on_commit only checks the first `cd` in a chained command** | `re.search` finds the first `cd` match; in a multi-`cd` chain the last destination (the actual commit location) is ignored, causing the hook to exit early when the factory root is the true target. `update_docs_on_commit.py:29`. | open |
 | **pattern-analyzer _append_entry inserts into the last fence, not the jsonlines fence** | `text.rfind(_FENCE_CLOSE)` finds the last ` ``` ` in the file; any markdown block after the jsonlines block causes new entries to land in the wrong fence, corrupting both blocks. `pattern-analyzer.py:78`. | open |
 | **pattern-analyzer _load_existing_skeletons toggles on any fence marker** | `if stripped.startswith("```"): in_block = not in_block` triggers on every fence opener/closer regardless of language; JSON objects in other fenced blocks are falsely counted as already-queued skeletons. `pattern-analyzer.py:59`. | open |
 | **compact-trigger `last` state never resets between sessions** | After a large session fires the nudge (e.g. 2 MB), a subsequent smaller-but-over-threshold session (e.g. 600 KB) is silently skipped because `size < last + hysteresis`. State file is never cleared on new/smaller sessions. `compact-trigger.py:71`. | open |
