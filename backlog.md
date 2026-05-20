@@ -8,7 +8,6 @@
 
 | Bug | Description | Status |
 |-----|-------------|--------|
-| **search.py crashes on corrupt embedding blob** | `np.frombuffer(...).reshape(-1, DIM)` at line 58-60 is outside any try/except; a single row with a truncated or corrupt embedding raises an unhandled `ValueError` and kills all searches. `search.py:58-60`. | open |
 | **update_docs_on_commit opens CHANGELOG.md relative to CWD** | `Path("CHANGELOG.md")` resolves against the process CWD, not the repo root; hook silently no-ops when invoked from any directory other than the repo root. `update_docs_on_commit.py:45`. | open |
 | **update_docs_on_commit only checks the first `cd` in a chained command** | `re.search` finds the first `cd` match; in a multi-`cd` chain the last destination (the actual commit location) is ignored, causing the hook to exit early when the factory root is the true target. `update_docs_on_commit.py:29`. | open |
 | **pattern-analyzer _append_entry inserts into the last fence, not the jsonlines fence** | `text.rfind(_FENCE_CLOSE)` finds the last ` ``` ` in the file; any markdown block after the jsonlines block causes new entries to land in the wrong fence, corrupting both blocks. `pattern-analyzer.py:78`. | open |

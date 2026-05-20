@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- fix: search() skips corrupt embedding blobs instead of crashing (`6ff98c7`) — 2026-05-20
+
+- fix: search() skips corrupt embedding blobs instead of crashing with ValueError; warns to stderr — 2026-05-20
 - fix: index-refresh now triggers re-embed for root_globs paths (`0d1a9fe`) — 2026-05-20
 
 - fix: index-refresh now triggers re-embed for docs/**/*.md and .agents/*.md by importing and checking INDEXED_ROOT_GLOBS — 2026-05-20

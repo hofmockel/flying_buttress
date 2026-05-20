@@ -7,6 +7,7 @@ Usage:
   python3 tools/search.py "rationale for COPX trim" --source-type journal -k 3
   python3 tools/search.py "cash floor" --json
 """
+
 from __future__ import annotations
 
 import argparse
@@ -27,7 +28,9 @@ from savings_log import append as _log_savings  # noqa: E402
 DEFAULT_K = 3
 
 
-def search(query: str, k: int = DEFAULT_K, source_type: str | None = None) -> list[dict]:
+def search(
+    query: str, k: int = DEFAULT_K, source_type: str | None = None
+) -> list[dict]:
     try:
         qvec = embed([query], input_type="query")[0]
     except RuntimeError as e:
@@ -43,23 +46,39 @@ def search(query: str, k: int = DEFAULT_K, source_type: str | None = None) -> li
                 params = (source_type,)
             rows = c.execute(sql, params).fetchall()
     except sqlite3.OperationalError as e:
-        print(f"ERROR: index unavailable ({e}); run `tools/embeddings.py refresh`", file=sys.stderr)
+        print(
+            f"ERROR: index unavailable ({e}); run `tools/embeddings.py refresh`",
+            file=sys.stderr,
+        )
         return []
 
     if not rows:
         return []
 
-    vecs = np.frombuffer(b"".join(r[5] for r in rows), dtype=np.float32).reshape(-1, DIM)
+    expected_bytes = DIM * np.dtype(np.float32).itemsize
+    good_rows = [r for r in rows if len(r[5]) == expected_bytes]
+    n_corrupt = len(rows) - len(good_rows)
+    if n_corrupt:
+        print(
+            f"WARNING: {n_corrupt} corrupt embedding(s) skipped; run `tools/embeddings.py refresh`",
+            file=sys.stderr,
+        )
+    if not good_rows:
+        return []
+
+    vecs = np.frombuffer(b"".join(r[5] for r in good_rows), dtype=np.float32).reshape(
+        -1, DIM
+    )
     # Stored vectors and query vector are both L2-normalized in `embed()`, so dot product = cosine similarity.
     scores = vecs @ qvec
     top = np.argsort(-scores)[:k]
     return [
         {
             "score": float(scores[i]),
-            "source_type": rows[i][1],
-            "source_path": rows[i][2],
-            "source_key": rows[i][3],
-            "text": rows[i][4],
+            "source_type": good_rows[i][1],
+            "source_path": good_rows[i][2],
+            "source_key": good_rows[i][3],
+            "text": good_rows[i][4],
         }
         for i in top
     ]
@@ -71,8 +90,9 @@ def main() -> int:
     # Default k=3 keeps lookups under ~300 tokens for the common case;
     # the long tail (rank 4+) is rarely informative. Pass -k 5/8 explicitly
     # for broad-research queries where you want the wider funnel.
-    ap.add_argument("-k", type=int, default=3,
-                    help="Number of chunks to return (default 3)")
+    ap.add_argument(
+        "-k", type=int, default=3, help="Number of chunks to return (default 3)"
+    )
     ap.add_argument("--source-type", choices=SOURCE_TYPES)
     ap.add_argument("--json", action="store_true")
     args = ap.parse_args()
@@ -91,13 +111,15 @@ def main() -> int:
                 full_file_chars += (BASE / fp).stat().st_size
             except OSError:
                 pass
-        _log_savings({
-            "strategy": "search",
-            "query": args.query,
-            "chunk_chars": chunk_chars,
-            "full_file_chars": full_file_chars,
-            "saved_chars": max(0, full_file_chars - chunk_chars),
-        })
+        _log_savings(
+            {
+                "strategy": "search",
+                "query": args.query,
+                "chunk_chars": chunk_chars,
+                "full_file_chars": full_file_chars,
+                "saved_chars": max(0, full_file_chars - chunk_chars),
+            }
+        )
 
     if args.json:
         print(json.dumps(results, indent=2))
@@ -106,7 +128,9 @@ def main() -> int:
         print("(no results — index may be empty; run `tools/embeddings.py refresh`)")
         return 0
     for r in results:
-        print(f"\n[{r['score']:.3f}] {r['source_path']}::{r['source_key']}  ({r['source_type']})")
+        print(
+            f"\n[{r['score']:.3f}] {r['source_path']}::{r['source_key']}  ({r['source_type']})"
+        )
         snippet = r["text"][:600]
         print(snippet + ("…" if len(r["text"]) > 600 else ""))
     return 0
