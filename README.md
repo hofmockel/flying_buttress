@@ -232,8 +232,8 @@ flying_buttress/
 The factory is actively developed. The contribution model is the same one it ships with:
 
 1. Read [ONBOARDING.md](ONBOARDING.md) — it applies to contributors too.
-2. Read [backlog.md](backlog.md) for open gaps and [docs/adr/README.md](docs/adr/README.md) for in-progress decisions.
-3. Find the lowest-numbered ADR with status **Proposed** — that is the next thing to build.
+2. Read [backlog.md](backlog.md) for open bugs and gaps. Read [docs/adr/README.md](docs/adr/README.md) for the decision history.
+3. If the backlog is empty and all ADRs are Accepted, scaffold a sibling test project and carry back improvements — that is the factory's primary feedback loop.
 4. Open a PR following the process in [docs/adr/ADR-003-team-coordination.md](docs/adr/ADR-003-team-coordination.md).
 
 Improvements that generalize — better rules, new skills, stronger quality gates — belong upstream. Improvements that are project-specific stay in your fork.

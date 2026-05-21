@@ -683,7 +683,7 @@ Scope is committed via ADR-001. Legend: **✓ done** — shipped and verified; *
 | `permissions.allow` — common read-only ops, project-scoped writes | ✓ done (v1) |
 | `permissions.deny` — destructive bash, secrets paths, `.git/` internals | ✓ done (2026-05-16) |
 | `hooks` — active learning hooks wired | ✓ done (2026-05-17) |
-| `hooks` — format / type-check / test on save | → v2 |
+| `hooks` — format / type-check / test on save | ✓ done (2026-05-17) |
 | `env` — model preference, fast-mode default, project flags | ○ speculative |
 
 ### 14.4 CLAUDE.md sections

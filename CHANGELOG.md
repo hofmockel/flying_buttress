@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- docs: update MANUAL, README, and plan.md to reflect current factory state (`c752ddf`) — 2026-05-20
+
 - chore: remove completed bug-hunt protocol history from backlog.md (`a6a03fb`) — 2026-05-20
 
 - chore: apply ruff formatter style fixes across hooks and tools (`cc028d1`) — 2026-05-20

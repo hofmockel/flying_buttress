@@ -688,11 +688,24 @@ Add it to the `help` target output so it shows in `make help`.
 
 Edit `.agents/<domain>.md`. Rules are short, specific, and have a why. PR required — see [§6](#6-the-rules-system).
 
-### Hooks (v2)
+### Hooks
 
-Hooks are shell commands triggered by Claude Code events (PreToolUse, PostToolUse, UserPromptSubmit, Stop). They are the load-bearing safety mechanism for v2 and are not yet configured in v1.
+Hooks are shell commands triggered by Claude Code events (PreToolUse, PostToolUse, Stop). They are wired in `.claude/settings.json` and run automatically every session. The factory ships with these active hooks:
 
-When hooks are added, they will live in `.claude/settings.json` under a `"hooks"` key. See `plan.md` §6.1 for the full model.
+| Hook | Event | What it does |
+|---|---|---|
+| `bash-logger.py` | PostToolUse(Bash) | Records tool-use patterns for active learning |
+| `tool-registry.py` | PostToolUse(Edit\|Write) | Tracks writes to `tools/` for skill promotion |
+| `pattern-analyzer.py` | Stop | Surfaces repeated patterns as tool promotion candidates |
+| `update_docs_on_commit.py` | PostToolUse(Bash) on `git commit` | Auto-inserts CHANGELOG bullet after each commit |
+| `on_write_fmt.py` | PostToolUse(Edit\|Write) | Auto-formats changed source files |
+| `on_write_lint.py` | PostToolUse(Edit\|Write) | Lints changed source files |
+| `on_write_test.py` | PostToolUse(Edit\|Write) | Runs tests when a test file changes |
+| `search-first.py` | PreToolUse(Read) | Enforces vector search before reading indexed files |
+| `mcp_check.py` | PreToolUse(Bash) | Guards against curl/wget bypassing the MCP layer |
+| `index-refresh.py` | PostToolUse(Edit\|Write) | Keeps the vector index current as files change |
+
+Additional hooks installed by `less_tokens` (if installed): `compact-trigger.py`, `truncate-output.py`, `caveman-reminder.py`. See `plan.md` §6.1 for the full hook model.
 
 ### Custom subagents (v2)
 
@@ -765,6 +778,9 @@ Alternatively, the `fewer-permission-prompts` skill can audit recent session tra
 | Skill | Trigger | What it does |
 |---|---|---|
 | `/spec` | "spec for X", "plan feature X", "I want to build X" | Guided PRD generation with plan mode gate |
+| `/fix` | "fix this bug", "next bug in backlog", "/fix" | Atomic TDD bug fix — failing test, minimal patch, commit |
+| `/review` | "review my changes", "review <file>", "/review" | Code review against `.agents/` rules |
+| `/scaffold` | "scaffold a new project", "create a new repo", "/scaffold" | Stamp out a sibling project from factory templates |
 
 ### Key files
 
