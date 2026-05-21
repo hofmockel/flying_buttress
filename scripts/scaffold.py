@@ -283,9 +283,7 @@ def main(argv=None):
         print("Done. Next steps:")
         print(f"  cd {target}")
         print("  make validate-hooks")
-        print(
-            "  claude   # open Claude Code and run /spec to start your first feature"
-        )
+        print("  claude   # open Claude Code and run /spec to start your first feature")
     print()
 
 

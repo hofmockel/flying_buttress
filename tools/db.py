@@ -5,6 +5,7 @@ Usage:
   python3 tools/db.py migrate  # apply any pending schema migrations
   python3 tools/db.py verify   # print row counts
 """
+
 from __future__ import annotations
 
 import argparse

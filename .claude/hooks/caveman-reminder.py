@@ -4,6 +4,7 @@
 Exits 2 with a one-line reminder when tool output contains known filler phrases.
 install.py wires this into .claude/settings.local.json automatically.
 """
+
 from __future__ import annotations
 
 import json

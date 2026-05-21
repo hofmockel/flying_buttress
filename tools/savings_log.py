@@ -3,6 +3,7 @@
 
 Imported by hooks and tools; no-ops silently when tracking is off.
 """
+
 from __future__ import annotations
 
 import json
